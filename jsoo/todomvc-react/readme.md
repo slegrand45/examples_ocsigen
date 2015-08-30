@@ -90,7 +90,7 @@ If you want to build the application on your own:
   ```sh
   > ocamlbuild -use-ocamlfind \
 	-tags "warn(-40)" \
-	-pkgs lwt.syntax,js_of_ocaml,js_of_ocaml.syntax,js_of_ocaml.tyxml,tyxml,js_of_ocaml.deriving,js_of_ocaml.deriving.syntax,deriving \
+	-pkgs lwt.syntax,js_of_ocaml,js_of_ocaml.syntax,js_of_ocaml.tyxml,tyxml,js_of_ocaml.deriving,js_of_ocaml.deriving.syntax,deriving,react,reactiveData \
 	-syntax camlp4o \
 	todomvc.byte ;
   ```
