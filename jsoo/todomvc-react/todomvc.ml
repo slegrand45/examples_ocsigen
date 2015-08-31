@@ -108,7 +108,7 @@ module Action = struct
 end
 
 (** Manage actions, refresh view if needed and save the state in local storage *)
-module Controler = struct
+module Controller = struct
 
   let update a ((r, f) : rp) =
     let open Action in
@@ -191,13 +191,13 @@ module View = struct
           a_placeholder "What needs to be done?" ;
           a_autofocus `Autofocus ;
           R.Html5.a_value (React.S.map (fun m -> m.Model.field) r) ;
-          a_onkeypress (fun evt -> if evt##keyCode = 13 then (Controler.update Add (r, f)); true) ;
+          a_onkeypress (fun evt -> if evt##keyCode = 13 then (Controller.update Add (r, f)); true) ;
         ] ())
     in
     let task_input_dom = To_dom.of_input task_input in
 
     bind_event Ev.inputs task_input_dom (fun _ ->
-      Lwt.return @@ (Controler.update (Update_field task_input_dom##value) (r, f))) ;
+      Lwt.return @@ (Controller.update (Update_field task_input_dom##value) (r, f))) ;
 
     Html5.(header ~a:[a_class ["header"]] [
         h1 [ pcdata "todos" ];
@@ -212,7 +212,7 @@ module View = struct
             a_input_type `Checkbox ;
             a_class ["toggle"] ;
             a_onclick (fun _ ->
-              (Controler.update (Check (todo.id, (not todo.completed))) (r, f)); true
+              (Controller.update (Check (todo.id, (not todo.completed))) (r, f)); true
             )]
           in if todo.completed then a_checked `Checked :: l else l
         ) ())
@@ -221,11 +221,11 @@ module View = struct
     let key_handler evt =
       if evt##keyCode = 13 then (
         let tgt = Dom_html.CoerceTo.input(Dom.eventTarget evt) in
-        Js.Opt.case tgt (fun () -> ()) (fun e -> Controler.update (Update_task (todo.id, e##value)) (r, f)) ;
-        Controler.update (Editing_task (todo.id, false)) (r, f) ;
+        Js.Opt.case tgt (fun () -> ()) (fun e -> Controller.update (Update_task (todo.id, e##value)) (r, f)) ;
+        Controller.update (Editing_task (todo.id, false)) (r, f) ;
         true
       )
-      else if evt##keyCode = 27 then (Controler.update (Action.Escape todo.id) (r, f); true)
+      else if evt##keyCode = 27 then (Controller.update (Action.Escape todo.id) (r, f); true)
       else true
     in
 
@@ -236,10 +236,10 @@ module View = struct
           a_value todo.description ;
           a_id (Printf.sprintf "todo-%u" todo.id) ;
           a_onblur (fun _ ->
-            (Controler.update (Editing_task (todo.Model.id, false)) (r, f)); true ) ;
+            (Controller.update (Editing_task (todo.Model.id, false)) (r, f)); true ) ;
           a_onchange (fun evt ->
             let tgt = Dom_html.CoerceTo.input(Dom.eventTarget evt) in
-            Js.Opt.case tgt (fun () -> true) (fun e -> Controler.update (Update_task (todo.id, e##value)) (r, f); true)) ;
+            Js.Opt.case tgt (fun () -> true) (fun e -> Controller.update (Update_task (todo.id, e##value)) (r, f); true)) ;
           a_onkeypress (fun evt -> key_handler evt) ;
           a_onkeydown (fun evt -> key_handler evt) ;
         ] ())
@@ -254,10 +254,10 @@ module View = struct
       div ~a:[a_class ["view"]] [
         input_check;
         label ~a:[a_ondblclick (
-            fun evt -> (Controler.update (Editing_task (todo.id, true)) (r, f)); true;
+            fun evt -> (Controller.update (Editing_task (todo.id, true)) (r, f)); true;
           )] [pcdata todo.Model.description];
         button ~a:[a_class ["destroy"]; a_onclick (
-            fun evt -> (Controler.update (Delete todo.Model.id) (r, f)); true;
+            fun evt -> (Controller.update (Delete todo.Model.id) (r, f)); true;
           )] []
       ];
       input_edit (r, f);
@@ -292,7 +292,7 @@ module View = struct
           a_input_type `Checkbox ;
           a_class ["toggle-all"] ;
           a_onclick (fun _ ->
-            Controler.update (Check_all (not (toggle_input_checked (React.S.value r)))) (r, f) ; true) ;
+            Controller.update (Check_all (not (toggle_input_checked (React.S.value r)))) (r, f) ; true) ;
         ]) () ;
       label ~a:[a_for "toggle-all"] [pcdata "Mark all as complete"] ;
       R.Html5.ul ~a:[a_class ["todo-list"]] rl
@@ -303,7 +303,7 @@ module View = struct
     let css =
       if visibility = actual_visibility then ["selected"] else []
     in
-    Html5.(li ~a:[a_onclick (fun _ -> Controler.update (Change_visibility visibility) (r, f); true)] [
+    Html5.(li ~a:[a_onclick (fun _ -> Controller.update (Change_visibility visibility) (r, f); true)] [
         a ~a:[a_href uri; a_class css]
           [pcdata (Model.string_of_visibility visibility)]
       ]) :: acc
@@ -317,7 +317,7 @@ module View = struct
       | _ -> false
     in
     let a_button = [a_class ["clear-completed"]; a_onclick (
-      fun evt -> (Controler.update (Delete_complete) (r, f)); true;
+      fun evt -> (Controller.update (Delete_complete) (r, f)); true;
     )] in
     let button_hidden m =
       let tasks = m.Model.tasks in
