@@ -8,3 +8,4 @@
 - A Reactive version of Tic-Tac-Toe game
   - Source: [https://github.com/slegrand45/examples_ocsigen/tree/master/jsoo/tic-tac-toe](https://github.com/slegrand45/examples_ocsigen/tree/master/jsoo/tic-tac-toe)
   - Demo: [http://slegrand45.github.io/examples_ocsigen.site/jsoo/tic-tac-toe/](http://slegrand45.github.io/examples_ocsigen.site/jsoo/tic-tac-toe/)
+  The idea of a Tic-Tac-Toe demo came from the talk ["Enterprise Tic-Tac-Toe"](http://fsharpforfunandprofit.com/ettt/) by Scott Wlaschin.
