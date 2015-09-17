@@ -1,0 +1,32 @@
+table {
+    border-collapse: collapse;
+    margin: 0 auto 0 auto;
+    font-size: 12em;
+    font-weight: bold;
+    text-align: center;
+}
+
+td { 
+	border: 5px solid black;
+	height: 1em;
+	width: 1em;
+	margin: 0;
+	padding: 0;
+}
+
+.info {
+	text-align: center;
+	font-size: 9pt;
+}
+
+.cellX {
+	color: blue;
+}
+
+.cellO {
+	color: green;
+}
+
+.cellWon {
+	background-color: yellow;
+}
