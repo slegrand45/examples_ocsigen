@@ -41,7 +41,7 @@ let get_cells_row board row =
 let string_of_cell cell = 
   match cell.state with
   | Played Player_x -> "✖"
-  | Played Player_o -> "⃝"
+  | Played Player_o -> "⚪"
   | Empty -> " "
 
 let update_cell board cell player = 
