@@ -265,17 +265,15 @@ module View = struct
 
   (** Build the tasks list *)
   let task_list ((r, f) : rp) =
-    let css_visibility m =
-      let tasks = m.Model.tasks in
+    let css_visibility tasks =
       match tasks with
       | [] -> "visibility: hidden;"
       | _ -> "visibility: visible;"
     in
-    let toggle_input_checked m =
-      let tasks = m.Model.tasks in
+    let toggle_input_checked tasks =
       List.for_all (fun e -> e.Model.completed) tasks
     in
-    let visible_tasks m =
+    let list_of_visible_tasks m =
       let visibility = m.Model.visibility in
       let is_visible todo =
         match visibility with
@@ -283,16 +281,20 @@ module View = struct
         | Active -> not todo.completed
         | All -> true
       in
-      let tasks = List.filter is_visible m.Model.tasks in
-      List.rev(List.fold_left (todo_item (r, f)) [] tasks)
+      List.filter is_visible m.Model.tasks
     in
-    let rl = ReactList.list (React.S.map visible_tasks r) in
-    Html5.(section ~a:[a_class ["main"]; R.Html5.a_style (React.S.map css_visibility r) ] [
-      Html5.input ~a:( (R.filter_attrib (a_checked `Checked) (React.S.map toggle_input_checked r)) :: [
+    let visible_tasks lvt =
+      List.rev(List.fold_left (todo_item (r, f)) [] lvt)
+    in
+    let react_tasks = React.S.map (fun m -> m.Model.tasks) r in
+    let rl = ReactList.list (React.S.map visible_tasks (React.S.map (fun m -> list_of_visible_tasks m) r)) in
+    Html5.(section ~a:[a_class ["main"]; R.Html5.a_style (React.S.map css_visibility react_tasks) ] [
+      Html5.input ~a:( (R.filter_attrib (a_checked `Checked) (React.S.map toggle_input_checked react_tasks)) :: [
           a_input_type `Checkbox ;
           a_class ["toggle-all"] ;
           a_onclick (fun _ ->
-            Controller.update (Check_all (not (toggle_input_checked (React.S.value r)))) (r, f) ; true) ;
+            let m = React.S.value r in
+            Controller.update (Check_all (not (toggle_input_checked m.Model.tasks))) (r, f) ; true) ;
         ]) () ;
       label ~a:[a_for "toggle-all"] [pcdata "Mark all as complete"] ;
       R.Html5.ul ~a:[a_class ["todo-list"]] rl
@@ -310,8 +312,7 @@ module View = struct
 
   let controls ((r, f) : rp) =
     let open Html5 in
-    let footer_hidden m =
-      let tasks = m.Model.tasks in
+    let footer_hidden tasks =
       match tasks with
       | [] -> true
       | _ -> false
@@ -319,20 +320,17 @@ module View = struct
     let a_button = [a_class ["clear-completed"]; a_onclick (
       fun evt -> (Controller.update (Delete_complete) (r, f)); true;
     )] in
-    let button_hidden m =
-      let tasks = m.Model.tasks in
+    let button_hidden tasks =
       let tasks_completed, _ = List.partition (fun e -> e.Model.completed) tasks in
       match tasks_completed with
       | [] -> true
       | _ -> false
     in
-    let nb_left m =
-      let tasks = m.Model.tasks in
+    let nb_left tasks =
       let _, tasks_left = List.partition (fun e -> e.Model.completed) tasks in
       string_of_int (List.length tasks_left)
     in
-    let item_left m =
-      let tasks = m.Model.tasks in
+    let item_left tasks =
       let _, tasks_left = List.partition (fun e -> e.Model.completed) tasks in
       if (List.length tasks_left = 1) then " item left" else " items left"
     in
@@ -340,15 +338,16 @@ module View = struct
       List.rev(List.fold_left (visibility_swap m (r, f)) []
         [("#/", Model.All); ("#/active", Model.Active); ("#/completed", Model.Completed)])
     in
+    let react_tasks = React.S.map (fun m -> m.Model.tasks) r in
     let html =
-      footer ~a:[a_class ["footer"]; (R.filter_attrib (a_hidden `Hidden) (React.S.map footer_hidden r))] [
+      footer ~a:[a_class ["footer"]; (R.filter_attrib (a_hidden `Hidden) (React.S.map footer_hidden react_tasks))] [
         span ~a:[a_class ["todo-count"]] [
-          strong ~a:[] [R.Html5.pcdata (React.S.map nb_left r)] ;
-          R.Html5.pcdata (React.S.map item_left r)
+          strong ~a:[] [R.Html5.pcdata (React.S.map nb_left react_tasks)] ;
+          R.Html5.pcdata (React.S.map item_left react_tasks)
         ];
         R.Html5.ul ~a:[a_class ["filters"]]
           (ReactList.list (React.S.map vswap r)) ;
-        button ~a:((R.filter_attrib (a_hidden `Hidden) (React.S.map button_hidden r)) :: a_button) [
+        button ~a:((R.filter_attrib (a_hidden `Hidden) (React.S.map button_hidden react_tasks)) :: a_button) [
           pcdata "Clear completed"
         ];
       ]
