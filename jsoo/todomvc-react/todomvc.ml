@@ -28,8 +28,8 @@ end
 module Model = struct
 
   type visibility =
-    Completed | Active | All
-    deriving (Json)
+      Completed | Active | All
+        deriving (Json)
 
   type task = {
     description : string ;
@@ -198,16 +198,16 @@ module View = struct
 
   let task_entry ((r, f) : rp) =
     bind_event Ev.keypresses task_input_dom (fun evt ->
-      Lwt.return @@
-      if evt##keyCode = 13 then (
-        Controller.update Add (r, f) ;
-        set_task_input ""
-      )
-    ) ;
+        Lwt.return @@
+        if evt##keyCode = 13 then (
+          Controller.update Add (r, f) ;
+          set_task_input ""
+        )
+      ) ;
 
     bind_event Ev.inputs task_input_dom (fun _ ->
-      Lwt.return @@
-      (Controller.update (Update_field task_input_dom##value) (r, f))) ;
+        Lwt.return @@
+        (Controller.update (Update_field task_input_dom##value) (r, f))) ;
 
     Html5.(header ~a:[a_class ["header"]] [
         h1 [ pcdata "todos" ];
@@ -222,10 +222,10 @@ module View = struct
             a_input_type `Checkbox ;
             a_class ["toggle"] ;
             a_onclick (fun _ ->
-              Controller.update (Check (todo.id, (not todo.completed))) (r, f) ;
-              focus_task_input () ;
-              true
-            )]
+                Controller.update (Check (todo.id, (not todo.completed))) (r, f) ;
+                focus_task_input () ;
+                true
+              )]
           in if todo.completed then a_checked `Checked :: l else l
         ) ())
     in
@@ -256,15 +256,15 @@ module View = struct
           a_value todo.description ;
           a_id (Printf.sprintf "todo-%u" todo.id) ;
           a_onblur (fun _ ->
-            Controller.update (Editing_task (todo.id, false)) (r, f) ;
-            focus_task_input () ;
-            true
-          ) ;
+              Controller.update (Editing_task (todo.id, false)) (r, f) ;
+              focus_task_input () ;
+              true
+            ) ;
           a_onchange (fun evt ->
-            let tgt = Dom_html.CoerceTo.input(Dom.eventTarget evt) in
-            Js.Opt.case tgt
-              (fun () -> true)
-              (fun e -> Controller.update (Update_task (todo.id, e##value)) (r, f); true)) ;
+              let tgt = Dom_html.CoerceTo.input(Dom.eventTarget evt) in
+              Js.Opt.case tgt
+                (fun () -> true)
+                (fun e -> Controller.update (Update_task (todo.id, e##value)) (r, f); true)) ;
           a_onkeypress (fun evt -> key_handler evt) ;
           a_onkeydown (fun evt -> key_handler evt) ;
         ] ())
@@ -276,21 +276,21 @@ module View = struct
     in
 
     Html5.(li ~a:[a_class (css_class [])] [
-      div ~a:[a_class ["view"]] [
-        input_check;
-        label ~a:[a_ondblclick (fun _ ->
-            Controller.update (Editing_task (todo.id, true)) (r, f) ;
-            focus_todo_item todo.id ;
-            true
-          )] [pcdata todo.description];
-        button ~a:[a_class ["destroy"]; a_onclick (fun evt ->
-            Controller.update (Delete todo.id) (r, f) ;
-            focus_task_input () ;
-            true
-          )] []
-      ];
-      input_edit (r, f);
-    ])
+        div ~a:[a_class ["view"]] [
+          input_check;
+          label ~a:[a_ondblclick (fun _ ->
+              Controller.update (Editing_task (todo.id, true)) (r, f) ;
+              focus_todo_item todo.id ;
+              true
+            )] [pcdata todo.description];
+          button ~a:[a_class ["destroy"]; a_onclick (fun evt ->
+              Controller.update (Delete todo.id) (r, f) ;
+              focus_task_input () ;
+              true
+            )] []
+        ];
+        input_edit (r, f);
+      ])
 
   (* Build the tasks list *)
   let task_list ((r, f) : rp) =
@@ -316,20 +316,20 @@ module View = struct
     let rl = ReactiveData.RList.from_signal (React.S.map list_of_visible_tasks r) in
     let rl = ReactiveData.RList.map (todo_item (r, f)) rl in
     Html5.(section ~a:[a_class ["main"]; R.Html5.a_style (React.S.map css_visibility react_tasks) ] [
-      Html5.input
-        ~a:( (R.filter_attrib (a_checked `Checked) (React.S.map toggle_input_checked react_tasks)) :: [
-          a_input_type `Checkbox ;
-          a_class ["toggle-all"] ;
-          a_onclick (fun _ ->
-            let m = React.S.value r in
-            Controller.update (Check_all (not (toggle_input_checked m.Model.tasks))) (r, f) ;
-            focus_task_input () ;
-            true
-          ) ;
-        ]) () ;
-      label ~a:[a_for "toggle-all"] [pcdata "Mark all as complete"] ;
-      R.Html5.ul ~a:[a_class ["todo-list"]] rl
-    ])
+        Html5.input
+          ~a:( (R.filter_attrib (a_checked `Checked) (React.S.map toggle_input_checked react_tasks)) :: [
+              a_input_type `Checkbox ;
+              a_class ["toggle-all"] ;
+              a_onclick (fun _ ->
+                  let m = React.S.value r in
+                  Controller.update (Check_all (not (toggle_input_checked m.Model.tasks))) (r, f) ;
+                  focus_task_input () ;
+                  true
+                ) ;
+            ]) () ;
+        label ~a:[a_for "toggle-all"] [pcdata "Mark all as complete"] ;
+        R.Html5.ul ~a:[a_class ["todo-list"]] rl
+      ])
 
   let visibility_swap m ((r, f) : rp) acc (uri, visibility)  =
     let actual_visibility = m.Model.visibility in
@@ -337,9 +337,9 @@ module View = struct
       if visibility = actual_visibility then ["selected"] else []
     in
     Html5.(li ~a:[a_onclick (fun _ ->
-            Controller.update (Change_visibility visibility) (r, f) ;
-            focus_task_input () ;
-            true)] [
+        Controller.update (Change_visibility visibility) (r, f) ;
+        focus_task_input () ;
+        true)] [
         a ~a:[a_href uri; a_class css]
           [pcdata (Model.string_of_visibility visibility)]
       ]) :: acc
@@ -352,10 +352,10 @@ module View = struct
       | _ -> false
     in
     let a_button = [a_class ["clear-completed"]; a_onclick (fun evt ->
-      Controller.update (Delete_complete) (r, f) ;
-      focus_task_input () ;
-      true
-    )] in
+        Controller.update (Delete_complete) (r, f) ;
+        focus_task_input () ;
+        true
+      )] in
     let button_hidden tasks =
       let tasks_completed, _ = List.partition (fun e -> e.Model.completed) tasks in
       match tasks_completed with
@@ -372,12 +372,12 @@ module View = struct
     in
     let vswap m =
       List.rev(List.fold_left (visibility_swap m (r, f)) []
-        [("#/", Model.All); ("#/active", Model.Active); ("#/completed", Model.Completed)])
+                 [("#/", Model.All); ("#/active", Model.Active); ("#/completed", Model.Completed)])
     in
     let react_tasks = React.S.map (fun m -> m.Model.tasks) r in
     let html =
       footer ~a:[a_class ["footer"];
-          (R.filter_attrib (a_hidden `Hidden) (React.S.map footer_hidden react_tasks))] [
+                 (R.filter_attrib (a_hidden `Hidden) (React.S.map footer_hidden react_tasks))] [
         span ~a:[a_class ["todo-count"]] [
           strong ~a:[] [R.Html5.pcdata (React.S.map nb_left react_tasks)] ;
           R.Html5.pcdata (React.S.map item_left react_tasks)
