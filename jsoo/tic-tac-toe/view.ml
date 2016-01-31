@@ -38,7 +38,7 @@ let table_board ((r, f) : rp) =
      cell_row (r, f) board Center cells_won ;
      cell_row (r, f) board Bottom cells_won]
   in
-  let rl = Rl.list (React.S.map cells r) in
+  let rl = ReactiveData.RList.from_signal (React.S.map cells r) in
   Html5.(section ~a:[a_class ["main"]] [
       R.Html5.table ~a:[a_class ["board"]] rl
     ])
