@@ -165,6 +165,7 @@ end
 (* Build HTML and send user actions *)
 module View = struct
 
+  open Model
   open Action
   open Tyxml_js
 
@@ -443,8 +444,8 @@ let main _ =
       let fragment =
         match u with
         | Url.Http h
-        | Url.Https h -> h.hu_fragment
-        | Url.File f -> f.fu_fragment
+        | Url.Https h -> h.Url.hu_fragment
+        | Url.File f -> f.Url.fu_fragment
       in
       match fragment with
       | "/" -> { m with Model.visibility = Model.All }
