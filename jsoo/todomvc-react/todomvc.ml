@@ -1,15 +1,5 @@
 open Lwt.Infix
 
-module ReactList = struct
-
-    let list t =
-      let open ReactiveData.RList in
-      make_from
-      (React.S.value t)
-      (React.E.map (fun e -> Set e) (React.S.changes t))
-
-end
-
 (** Utility module for local storage. *)
 module Storage = struct
 
@@ -205,7 +195,7 @@ module View = struct
       ])
 
   (** One item in the tasks list *)
-  let todo_item ((r, f) : rp) acc (todo:Model.task) =
+  let todo_item ((r, f) : rp) (* acc *) (todo:Model.task) =
     let input_check =
       Html5.(input ~a:(
           let l = [
@@ -261,7 +251,7 @@ module View = struct
           )] []
       ];
       input_edit (r, f);
-    ]) :: acc
+    ])
 
   (** Build the tasks list *)
   let task_list ((r, f) : rp) =
@@ -283,11 +273,9 @@ module View = struct
       in
       List.filter is_visible m.Model.tasks
     in
-    let visible_tasks lvt =
-      List.rev(List.fold_left (todo_item (r, f)) [] lvt)
-    in
     let react_tasks = React.S.map (fun m -> m.Model.tasks) r in
-    let rl = ReactList.list (React.S.map visible_tasks (React.S.map (fun m -> list_of_visible_tasks m) r)) in
+    let rl = ReactiveData.RList.from_signal (React.S.map list_of_visible_tasks r) in
+    let rl = ReactiveData.RList.map (todo_item (r, f)) rl in
     Html5.(section ~a:[a_class ["main"]; R.Html5.a_style (React.S.map css_visibility react_tasks) ] [
       Html5.input ~a:( (R.filter_attrib (a_checked `Checked) (React.S.map toggle_input_checked react_tasks)) :: [
           a_input_type `Checkbox ;
@@ -346,7 +334,7 @@ module View = struct
           R.Html5.pcdata (React.S.map item_left react_tasks)
         ];
         R.Html5.ul ~a:[a_class ["filters"]]
-          (ReactList.list (React.S.map vswap r)) ;
+          (ReactiveData.RList.from_signal (React.S.map vswap r)) ;
         button ~a:((R.filter_attrib (a_hidden `Hidden) (React.S.map button_hidden react_tasks)) :: a_button) [
           pcdata "Clear completed"
         ];
