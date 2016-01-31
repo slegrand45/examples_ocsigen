@@ -1,4 +1,3 @@
-open Action
 open Types
 open Tyxml_js
 
@@ -10,18 +9,18 @@ let part_header (r, f) =
           span ~a:[a_class ["mdl-layout-title"]] [
             a ~a:[
                 a_href "#" ;
-                a_onclick (fun evt -> (Controller.update (Action.Update_lang I18n.En) (r, f)); true)
+                a_onclick (fun _ -> (Controller.update (Action.Update_lang I18n.En) (r, f)); true)
               ] [ pcdata "En" ] ;
             pcdata " | " ;
             a ~a:[
                 a_href "#" ;
-                a_onclick (fun evt -> (Controller.update (Action.Update_lang I18n.Fr) (r, f)); true)
+                a_onclick (fun _ -> (Controller.update (Action.Update_lang I18n.Fr) (r, f)); true)
               ] [ pcdata "Fr" ] ;
           ] ;
         ]
       ])
 
-let part_contact (r, f) =
+let part_contact (r, _) =
   let rl_title = React.S.map (fun (_, cv) -> I18n.translate (CV.lang cv) (I18n.get_msg I18n.Contact_title Model.msg)) r in
   let rl_email = React.S.map (fun (_, cv) -> let id = CV.id cv in (ID.email id)) r in
   let part_without_href icon (cv, v) =
@@ -71,7 +70,7 @@ let part_contact (r, f) =
     ] ;
   )
 
-let one_skill (r, f) (cv, s) =
+let one_skill (cv, s) =
   let width = Printf.sprintf "width: %d%%;" s.Skill.percent in
   Html5.(
     div [
@@ -83,10 +82,10 @@ let one_skill (r, f) (cv, s) =
     ]
   )
 
-let part_skill (r, f) =
+let part_skill (r, _) =
   let rl_title = React.S.map (fun (_, cv) -> I18n.translate (CV.lang cv) (I18n.get_msg I18n.Skill_title Model.msg)) r in
   let rl = ReactiveData.RList.from_signal (React.S.map (fun (_, cv) -> List.map (fun e -> cv, e) (CV.skill cv)) r) in
-  let rl = ReactiveData.RList.map (one_skill (r, f)) rl in
+  let rl = ReactiveData.RList.map one_skill rl in
   Html5.(
     div ~a:[a_class ["block"]] [
       h5 [
@@ -97,7 +96,7 @@ let part_skill (r, f) =
     ]
   )
 
-let one_language (r, f) (cv, l) =
+let one_language (cv, l) =
   Html5.(
     div [
       h6 [ pcdata (I18n.translate (CV.lang cv) l.Language.title) ] ;
@@ -106,10 +105,10 @@ let one_language (r, f) (cv, l) =
     ]
   )
 
-let part_language (r, f) =
+let part_language (r, _) =
   let rl_title = React.S.map (fun (_, cv) -> I18n.translate (CV.lang cv) (I18n.get_msg I18n.Language_title Model.msg)) r in
   let rl = ReactiveData.RList.from_signal (React.S.map (fun (_, cv) -> List.map (fun e -> cv, e) (CV.language cv)) r) in
-  let rl = ReactiveData.RList.map (one_language (r, f)) rl in
+  let rl = ReactiveData.RList.map one_language rl in
   Html5.(
     div ~a:[a_class ["block"]] [
       h5 [
@@ -120,7 +119,7 @@ let part_language (r, f) =
     ]
   )
 
-let one_work (r, f) (cv, w) =
+let one_work (cv, w) =
   let f e =
     match e with
     | None -> ""
@@ -137,7 +136,7 @@ let one_work (r, f) (cv, w) =
   let html_company_location =
     match s_company_location with
     | "" -> []
-    | v -> Html5.([
+    | _ -> Html5.([
         i ~a:[a_class ["material-icons"; "red-text"]] [ pcdata "place"] ;
         pcdata s_company_location ;
       ])
@@ -148,7 +147,7 @@ let one_work (r, f) (cv, w) =
   let html_date =
     match s_date with
     | "" -> []
-    | v -> Html5.([
+    | _ -> Html5.([
         i ~a:[a_class ["material-icons"; "red-text"]] [ pcdata "date_range"] ;
         pcdata s_date ;
       ])
@@ -163,10 +162,10 @@ let one_work (r, f) (cv, w) =
     ]
   )
 
-let part_work (r, f) =
+let part_work (r, _) =
   let rl_title = React.S.map (fun (_, cv) -> I18n.translate (CV.lang cv) (I18n.get_msg I18n.Work_title Model.msg)) r in
   let rl = ReactiveData.RList.from_signal (React.S.map (fun (_, cv) -> List.map (fun e -> cv, e) (CV.experience cv)) r) in
-  let rl = ReactiveData.RList.map (one_work (r, f)) rl in
+  let rl = ReactiveData.RList.map one_work rl in
   Html5.([
     h3 [
       i ~a:[a_class ["material-icons"]] [ pcdata "group" ] ;
@@ -175,7 +174,7 @@ let part_work (r, f) =
     R.Html5.div rl
   ])
 
-let one_education (r, f) (cv, e) =
+let one_education (cv, e) =
   let f e =
     match e with
     | None -> ""
@@ -185,7 +184,7 @@ let one_education (r, f) (cv, e) =
   let html_school =
     match s_school with
     | "" -> []
-    | v -> Html5.([
+    | _ -> Html5.([
         i ~a:[a_class ["material-icons"; "red-text"]] [ pcdata "place"] ;
         pcdata s_school ;
       ])
@@ -196,7 +195,7 @@ let one_education (r, f) (cv, e) =
   let html_date =
     match s_date with
     | "" -> []
-    | v -> Html5.([
+    | _ -> Html5.([
         i ~a:[a_class ["material-icons"; "red-text"]] [ pcdata "date_range"] ;
         pcdata s_date ;
       ])
@@ -211,36 +210,32 @@ let one_education (r, f) (cv, e) =
     ]
   )
 
-let part_education (r, f) =
+let part_education (r, _) =
   let rl_title = React.S.map (fun (_, cv) ->
     I18n.translate (CV.lang cv) (I18n.get_msg I18n.Education_title Model.msg)) r
-  in
-  let rl_title_sub cat = React.S.map (fun (_, cv) ->
-    Education.translate_category (CV.lang cv) cat) r
   in
   let rl f =
     let l = ReactiveData.RList.from_signal (React.S.map (fun (_, cv) ->
       List.map (fun e -> cv, e) (f (CV.education cv))) r)
     in
-    ReactiveData.RList.map (one_education (r, f)) l
+    ReactiveData.RList.map one_education l
   in
   Html5.([
     h3 [
       i ~a:[a_class ["material-icons"]] [ pcdata "school" ] ;
         R.Html5.pcdata rl_title ;
     ] ;
-    (* h4 [ R.Html5.pcdata (rl_title_sub Education.Diploma) ] ; *)
     R.Html5.div (rl Education.diploma) ;
   ])
 
-let one_portfolio_details cv n p info (r, f) =
+let one_portfolio_details cv n info (r, f) =
   Html5.(
     div ~a:[a_class ["mdl-cell"; "mdl-cell--4-col"; "block"]] [
       div ~a:[a_class ["mdl-card"; "mdl-shadow--2dp"]] [
         div ~a:[a_class ["mdl-card__actions"; "mdl-card--border"]] [
           div ~a:[a_class ["mdl-layout-spacer"]] [] ;
           i ~a:[a_class ["material-icons"] ;
-            a_onclick (fun evt -> (Controller.update (Action.Portfolio_summary n) (r, f)); true)]
+            a_onclick (fun _ -> (Controller.update (Action.Portfolio_summary n) (r, f)); true)]
             [ pcdata "close" ]
         ] ;
         div ~a:[a_class ["mdl-card__supporting-text"]] [
@@ -250,7 +245,7 @@ let one_portfolio_details cv n p info (r, f) =
     ]
   )
 
-let one_portfolio_summary cv n p info (r, f) =
+let one_portfolio_summary cv n info (r, f) =
   Html5.(
     div ~a:[a_class ["mdl-cell"; "mdl-cell--4-col"; "block"]] [
       div ~a:[a_class ["mdl-card"; "mdl-shadow--2dp"]] [
@@ -263,7 +258,7 @@ let one_portfolio_summary cv n p info (r, f) =
           pcdata (I18n.translate (CV.lang cv) (info.Portfolio.title)) ;
           div ~a:[a_class ["mdl-layout-spacer"]] [] ;
           i ~a:[a_class ["material-icons"] ;
-            a_onclick (fun evt -> (Controller.update (Action.Portfolio_details n) (r, f)); true)]
+            a_onclick (fun _ -> (Controller.update (Action.Portfolio_details n) (r, f)); true)]
             [ pcdata "more_vert" ]
         ] ;
       ]
@@ -281,8 +276,8 @@ let part_portfolio (r, f) =
       let f' (i, p) =
         let info = List.nth portfolio i in
         match p with
-        | Page.Summary -> one_portfolio_summary cv i p info (r, f)
-        | Page.Details -> one_portfolio_details cv i p info (r, f)
+        | Page.Summary -> one_portfolio_summary cv i info (r, f)
+        | Page.Details -> one_portfolio_details cv i info (r, f)
       in
       List.map f' l
     ) r
@@ -295,7 +290,7 @@ let part_portfolio (r, f) =
     R.Html5.div ~a:[a_class ["mdl-grid"; "portfolio"]] rlp
   ])
 
-let part_footer (r, f) =
+let part_footer () =
   Html5.(
     footer ~a:[a_class ["mdl-mini-footer"]] [
       div ~a:[a_class ["mdl-mini-footer__left-section"]] [
@@ -360,5 +355,5 @@ let view (r, f) =
           ]
         ]
       ] ;
-      part_footer (r, f) ;
+      part_footer () ;
     ])
