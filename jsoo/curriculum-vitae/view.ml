@@ -43,13 +43,13 @@ let part_contact (r, f) =
         p [ pcdata "" ]
     )
   in
-  let rl_address = ReactiveData.RList.make_from_s (React.S.map (fun (_, cv) -> let id = CV.id cv in [(cv, ID.address id)]) r) in
+  let rl_address = ReactiveData.RList.from_signal (React.S.map (fun (_, cv) -> let id = CV.id cv in [(cv, ID.address id)]) r) in
   let rl_address = ReactiveData.RList.map (part_without_href "place") rl_address in
-  let rl_phone = ReactiveData.RList.make_from_s (React.S.map (fun (_, cv) -> let id = CV.id cv in [(cv, ID.phone id)]) r) in
+  let rl_phone = ReactiveData.RList.from_signal (React.S.map (fun (_, cv) -> let id = CV.id cv in [(cv, ID.phone id)]) r) in
   let rl_phone = ReactiveData.RList.map (part_without_href "smartphone") rl_phone in
-  let rl_github = ReactiveData.RList.make_from_s (React.S.map (fun (_, cv) -> let id = CV.id cv in [ID.github id]) r) in
+  let rl_github = ReactiveData.RList.from_signal (React.S.map (fun (_, cv) -> let id = CV.id cv in [ID.github id]) r) in
   let rl_github = ReactiveData.RList.map (part_with_href "link" "https://") rl_github in
-  let rl_web = ReactiveData.RList.make_from_s (React.S.map (fun (_, cv) -> let id = CV.id cv in [ID.web id]) r) in
+  let rl_web = ReactiveData.RList.from_signal (React.S.map (fun (_, cv) -> let id = CV.id cv in [ID.web id]) r) in
   let rl_web = ReactiveData.RList.map (part_with_href "link" "https://") rl_web in
   Html5.(
     div ~a:[a_class ["block"]] [
@@ -85,7 +85,7 @@ let one_skill (r, f) (cv, s) =
 
 let part_skill (r, f) =
   let rl_title = React.S.map (fun (_, cv) -> I18n.translate (CV.lang cv) (I18n.get_msg I18n.Skill_title Model.msg)) r in
-  let rl = ReactiveData.RList.make_from_s (React.S.map (fun (_, cv) -> List.map (fun e -> cv, e) (CV.skill cv)) r) in
+  let rl = ReactiveData.RList.from_signal (React.S.map (fun (_, cv) -> List.map (fun e -> cv, e) (CV.skill cv)) r) in
   let rl = ReactiveData.RList.map (one_skill (r, f)) rl in
   Html5.(
     div ~a:[a_class ["block"]] [
@@ -108,7 +108,7 @@ let one_language (r, f) (cv, l) =
 
 let part_language (r, f) =
   let rl_title = React.S.map (fun (_, cv) -> I18n.translate (CV.lang cv) (I18n.get_msg I18n.Language_title Model.msg)) r in
-  let rl = ReactiveData.RList.make_from_s (React.S.map (fun (_, cv) -> List.map (fun e -> cv, e) (CV.language cv)) r) in
+  let rl = ReactiveData.RList.from_signal (React.S.map (fun (_, cv) -> List.map (fun e -> cv, e) (CV.language cv)) r) in
   let rl = ReactiveData.RList.map (one_language (r, f)) rl in
   Html5.(
     div ~a:[a_class ["block"]] [
@@ -165,7 +165,7 @@ let one_work (r, f) (cv, w) =
 
 let part_work (r, f) =
   let rl_title = React.S.map (fun (_, cv) -> I18n.translate (CV.lang cv) (I18n.get_msg I18n.Work_title Model.msg)) r in
-  let rl = ReactiveData.RList.make_from_s (React.S.map (fun (_, cv) -> List.map (fun e -> cv, e) (CV.experience cv)) r) in
+  let rl = ReactiveData.RList.from_signal (React.S.map (fun (_, cv) -> List.map (fun e -> cv, e) (CV.experience cv)) r) in
   let rl = ReactiveData.RList.map (one_work (r, f)) rl in
   Html5.([
     h3 [
@@ -219,7 +219,7 @@ let part_education (r, f) =
     Education.translate_category (CV.lang cv) cat) r
   in
   let rl f =
-    let l = ReactiveData.RList.make_from_s (React.S.map (fun (_, cv) ->
+    let l = ReactiveData.RList.from_signal (React.S.map (fun (_, cv) ->
       List.map (fun e -> cv, e) (f (CV.education cv))) r)
     in
     ReactiveData.RList.map (one_education (r, f)) l
@@ -274,7 +274,7 @@ let part_portfolio (r, f) =
   let rl_title = React.S.map (fun (_, cv) ->
     I18n.translate (CV.lang cv) (I18n.get_msg I18n.Portfolio_title Model.msg)) r
   in
-  let rlp = ReactiveData.RList.make_from_s (
+  let rlp = ReactiveData.RList.from_signal (
     React.S.map (fun (page, cv) ->
       let portfolio = CV.portfolio cv in
       let l = Page.portfolio page in
