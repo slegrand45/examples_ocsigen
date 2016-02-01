@@ -2,8 +2,7 @@
 
 # Compile OCaml source file to OCaml bytecode
 ocamlbuild -use-ocamlfind \
-  -pkgs lwt.syntax,js_of_ocaml,js_of_ocaml.syntax,js_of_ocaml.tyxml,tyxml,js_of_ocaml.deriving,js_of_ocaml.deriving.syntax,deriving,react,reactiveData \
-  -syntax camlp4o \
+  -pkgs lwt.ppx,js_of_ocaml,js_of_ocaml.ppx,js_of_ocaml.tyxml,tyxml,ppx_deriving,js_of_ocaml.deriving.ppx,js_of_ocaml.deriving,react,reactiveData \
   todomvc.byte ;
 
 # Build JS code from the OCaml bytecode

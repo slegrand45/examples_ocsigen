@@ -89,16 +89,12 @@ If you want to build the application on your own:
 
   ```sh
   > ocamlbuild -use-ocamlfind \
-	-tags "warn(-40)" \
-	-pkgs lwt.syntax,js_of_ocaml,js_of_ocaml.syntax,js_of_ocaml.tyxml,tyxml,js_of_ocaml.deriving,js_of_ocaml.deriving.syntax,deriving,react,reactiveData \
-	-syntax camlp4o \
+	-pkgs lwt.ppx,js_of_ocaml,js_of_ocaml.ppx,js_of_ocaml.tyxml,tyxml,ppx_deriving,js_of_ocaml.deriving.ppx,js_of_ocaml.deriving,react,reactiveData \
 	todomvc.byte ;
   ```
 
   The command options are:
   - `-use-ocamlfind` and `-pkgs ...` to use the necessary `ocamlfind` packages.
-  - `-tags "warn(-40)"` to avoid harmless warnings about constructor or label name used out of scope.
-  - `-syntax camlp4o` for the syntax extension support.
 3. Build the Javascript file from the `todomvc.byte` file with the `js_of_ocaml` command:
 
   ```sh

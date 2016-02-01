@@ -6,17 +6,17 @@ module Storage = struct
   open Js
 
   let storage =
-    Optdef.case (Dom_html.window##localStorage)
+    Optdef.case Dom_html.window##.localStorage
       (fun () -> failwith "Storage is not supported by this browser")
       (fun v -> v)
 
   let key = string "jsoo-todo-state"
 
   let find () =
-    let r = storage##getItem(key) in
+    let r = storage##getItem key in
     Opt.to_option @@ Opt.map r to_string
 
-  let set v = storage##setItem(key, string v)
+  let set v = storage##setItem key (string v)
 
   let init default = match find () with
     | None -> set default ; default
@@ -29,7 +29,7 @@ module Model = struct
 
   type visibility =
       Completed | Active | All
-        deriving (Json)
+        [@@deriving json]
 
   type task = {
     description : string ;
@@ -38,14 +38,14 @@ module Model = struct
     completed : bool ;
     editing : bool ;
     id : int ;
-  } deriving (Json)
+  } [@@deriving json]
 
   type t = {
     tasks : task list ;
     field : string ;
     uid : int ;
     visibility : visibility ;
-  } deriving (Json) (* to save/restore the state in JSON *)
+  } [@@deriving json] (* to save/restore the state in JSON *)
 
   let empty = {
     tasks = [] ;
@@ -69,10 +69,10 @@ module Model = struct
     | All -> "All"
 
   let from_json s =
-    Json.from_string<t> s
+    Deriving_Json.from_string [%derive.json: t] s
 
   let to_json m =
-    Json.to_string<t> m
+    Deriving_Json.to_string [%derive.json: t] m
 
 end
 
@@ -177,7 +177,7 @@ module View = struct
   let focus_todo_item id =
     let e = Dom_html.getElementById(Printf.sprintf "todo-%u" id) in
     Js.Opt.case (Dom_html.CoerceTo.input e)
-      (fun e -> ()) (fun e -> e##focus ())
+      (fun e -> ()) (fun e -> e##focus)
 
   (* New task input field *)
   let task_input =
@@ -192,15 +192,15 @@ module View = struct
     To_dom.of_input task_input
 
   let set_task_input v =
-    task_input_dom##value <- Js.string v
+    task_input_dom##.value := Js.string v
 
   let focus_task_input () =
-    task_input_dom##focus ()
+    task_input_dom##focus
 
   let task_entry ((r, f) : rp) =
     bind_event Ev.keypresses task_input_dom (fun evt ->
         Lwt.return @@
-        if evt##keyCode = 13 then (
+        if evt##.keyCode = 13 then (
           Controller.update Add (r, f) ;
           set_task_input ""
         )
@@ -208,7 +208,7 @@ module View = struct
 
     bind_event Ev.inputs task_input_dom (fun _ ->
         Lwt.return @@
-        (Controller.update (Update_field task_input_dom##value) (r, f))) ;
+        (Controller.update (Update_field task_input_dom##.value) (r, f))) ;
 
     Html5.(header ~a:[a_class ["header"]] [
         h1 [ pcdata "todos" ];
@@ -232,17 +232,17 @@ module View = struct
     in
 
     let key_handler evt =
-      if evt##keyCode = 13 then (
+      if evt##.keyCode = 13 then (
         let tgt = Dom_html.CoerceTo.input(Dom.eventTarget evt) in
         Js.Opt.case tgt
           (fun () -> ())
-          (fun e -> Controller.update (Update_task (todo.id, e##value)) (r, f)) ;
+          (fun e -> Controller.update (Update_task (todo.id, e##.value)) (r, f)) ;
         Controller.update
           (Editing_task (todo.id, false)) (r, f) ;
         focus_task_input () ;
         true
       )
-      else if evt##keyCode = 27 then (
+      else if evt##.keyCode = 27 then (
         Controller.update (Action.Escape todo.id) (r, f) ;
         focus_task_input () ;
         true
@@ -265,7 +265,7 @@ module View = struct
               let tgt = Dom_html.CoerceTo.input(Dom.eventTarget evt) in
               Js.Opt.case tgt
                 (fun () -> true)
-                (fun e -> Controller.update (Update_task (todo.id, e##value)) (r, f); true)) ;
+                (fun e -> Controller.update (Update_task (todo.id, e##.value)) (r, f); true)) ;
           a_onkeypress (fun evt -> key_handler evt) ;
           a_onkeydown (fun evt -> key_handler evt) ;
         ] ())
@@ -431,7 +431,7 @@ end
 let main _ =
   let doc = Dom_html.document in
   let parent =
-    Js.Opt.get (doc##getElementById(Js.string "todomvc"))
+    Js.Opt.get (doc##getElementById (Js.string "todomvc"))
       (fun () -> assert false)
   in
   (* restore the saved state or empty state if not found *)
