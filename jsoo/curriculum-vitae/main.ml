@@ -4,9 +4,9 @@ open Types
 (* https://github.com/ocsigen/js_of_ocaml/blob/master/examples/hyperbolic/hypertree.ml *)
 let default_language () =
   Js.to_string(
-  	(Js.Optdef.get (Dom_html.window##navigator##language) (fun () ->
-   	Js.Optdef.get (Dom_html.window##navigator##userLanguage) (fun () ->
-   	Js.string "en")))##substring(0,2)
+    Js.Optdef.get (Dom_html.window##.navigator##.language) (fun () ->
+      Js.Optdef.get (Dom_html.window##.navigator##.userLanguage) (fun () ->
+        Js.string "en")))##substring 0 2
    )
 
 let main _ =
