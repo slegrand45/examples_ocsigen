@@ -12,3 +12,8 @@
 - Even :space_invader: Darth Vader :space_invader: uses js_of_ocaml. This is a port of the [Darth Vader Résumé](http://articles.novoresume.com/luke-who-is-searching-for-a-job/) from Novorésumé with a [Material Design template](http://demo.themesafari.net/materialize-responsive-resume/). The code uses the force and [Material Design Lite](http://www.getmdl.io).
   - Source: [https://github.com/slegrand45/examples_ocsigen/tree/master/jsoo/curriculum-vitae](https://github.com/slegrand45/examples_ocsigen/tree/master/jsoo/curriculum-vitae)
   - Demo: [http://slegrand45.github.io/examples_ocsigen.site/jsoo/curriculum-vitae/](http://slegrand45.github.io/examples_ocsigen.site/jsoo/curriculum-vitae/)
+
+- A Pong game. Inspired by the article ["Client-side haskell"](http://ifeanyi.co/posts/client-side-haskell/) written by Ifeanyi Ubah.
+  - Source: [https://github.com/slegrand45/examples_ocsigen/tree/master/jsoo/pong](https://github.com/slegrand45/examples_ocsigen/tree/master/jsoo/pong)
+  - Demo: [http://slegrand45.github.io/examples_ocsigen.site/jsoo/pong/](http://slegrand45.github.io/examples_ocsigen.site/jsoo/pong/)
+

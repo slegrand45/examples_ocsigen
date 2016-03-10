@@ -1,5 +1,3 @@
-(* http://ifeanyi.co/posts/client-side-haskell/ *)
-
 open Lwt.Infix
 
 module Model = struct
@@ -261,7 +259,6 @@ module View = struct
     let measure = ctx##measureText text in
     let width = measure##.width in
     let height = 32. +. 8. in (* font size + delta *)
-    (* let height = measure##.actualBoundingBoxAscent +. measure##.actualBoundingBoxDescent in *)
     let x = Model.width /. 2. in
     let y = Model.height /. 3. in
     (text, width, height, x, y)
