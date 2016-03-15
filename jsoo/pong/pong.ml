@@ -76,7 +76,7 @@ module Model = struct
     let sign_y =
       if Random.bool () then (-. 1.) else 1.
     in
-    create_point (sign_x *. (ball_size /. 3.)) (sign_y *. (ball_size /. 4.))
+    create_point (sign_x *. (10. *. ball_size)) (sign_y *. (9. *.ball_size))
 
   let init_ball_x = width /. 2.
 
@@ -99,7 +99,7 @@ type rp = rs * rf
 module Action = struct
 
   type action =
-    | Move_ball
+    | Move_ball of float
     | Start_game
     | Stop_game
     | Move_paddle_up
@@ -115,7 +115,7 @@ module Controller = struct
     let m = React.S.value r in
     let m =
       match a with
-      | Move_ball ->
+      | Move_ball dt ->
         let pos = m.ball_position in
         let speed = m.ball_speed in
         let (player_one_x, player_one_y) =
@@ -135,35 +135,35 @@ module Controller = struct
           | Player_one _ -> assert false
         in
         let new_x, new_y, new_speed =
-          if ((pos.y +. ball_size >= height)
-              || (pos.y <= 0.)) then (
+          if ((pos.y +. (speed.y *. dt) +. ball_size >= height)
+              || (pos.y +. (speed.y *. dt) <= 0.)) then (
             (* ball hits bottom or up wall *)
             let new_speed = create_point speed.x (speed.y *. (-1.)) in
-            let new_x = pos.x +. new_speed.x in
-            let new_y = pos.y +. new_speed.y in
+            let new_x = pos.x +. (new_speed.x *. dt) in
+            let new_y = pos.y +. (new_speed.y *. dt) in
             (new_x, new_y, new_speed)
-          ) else if (pos.x +. speed.x <= player_one_x +. paddle_width
-                     && pos.x +. speed.x > player_one_x
-                     && pos.y >= player_one_y -. ball_size
-                     && pos.y <= player_one_y +. paddle_height) then (
+          ) else if (pos.x +. (speed.x *. dt) <= player_one_x +. paddle_width
+                     && pos.x +. (speed.x *. dt) > player_one_x
+                     && pos.y +. (speed.y *. dt) >= player_one_y -. ball_size
+                     && pos.y +. (speed.y *. dt) <= player_one_y +. paddle_height) then (
             (* ball hits player one (left side) paddle *)
             let new_speed = create_point (speed.x *. (-1.)) speed.y in          	
-            let new_x = pos.x +. new_speed.x in
-            let new_y = pos.y +. new_speed.y in
+            let new_x = pos.x +. (new_speed.x *. dt) in
+            let new_y = pos.y +. (new_speed.y *. dt) in
             (new_x, new_y, new_speed)
-          ) else if (pos.x +. ball_size +. speed.x >= player_two_x
-                     && pos.x +. ball_size +. speed.x < player_two_x +. paddle_width
-                     && pos.y >= player_two_y -. ball_size
-                     && pos.y <= player_two_y +. paddle_height) then (
+          ) else if (pos.x +. ball_size +. (speed.x *. dt) >= player_two_x
+                     && pos.x +. ball_size +. (speed.x *. dt) < player_two_x +. paddle_width
+                     && pos.y +. (speed.y *. dt) >= player_two_y -. ball_size
+                     && pos.y +. (speed.y *. dt) <= player_two_y +. paddle_height) then (
             (* ball hits player two (right side) paddle *)
             let new_speed = create_point (speed.x *. (-1.)) speed.y in          	
-            let new_x = pos.x +. new_speed.x in
-            let new_y = pos.y +. new_speed.y in
+            let new_x = pos.x +. (new_speed.x *. dt) in
+            let new_y = pos.y +. (new_speed.y *. dt) in
             (new_x, new_y, new_speed)
           ) else (
             (* no hit *)
-            let new_x = pos.x +. speed.x in
-            let new_y = pos.y +. speed.y in
+            let new_x = pos.x +. (speed.x *. dt) in
+            let new_y = pos.y +. (speed.y *. dt) in
             (new_x, new_y, speed)
           )
         in
@@ -381,15 +381,14 @@ let start node =
   let rec frame t' =
     let m = React.S.value r in
     let () =
+      let dt = (t' -. !t) /. 1000. in
       match m.Model.status with
       | Model.Playing ->
-        if (t' -. !t >= 0.04) then (
-          if !status <> Model.Playing then (
-            status := Model.Playing
-          ) ;
-          View.draw c m ;
-          Controller.update Action.Move_ball (r, f);
-        )
+        if !status <> Model.Playing then (
+          status := Model.Playing
+        ) ;
+        View.draw c m ;
+        Controller.update (Action.Move_ball dt) (r, f) ;
       | Model.Not_playing ->
         if !status = Model.Playing then (
           View.draw c m ;
