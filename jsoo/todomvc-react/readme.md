@@ -37,7 +37,6 @@ If you want to build the application on your own:
 
     ```sh
     > opam switch
-    --     -- 3.11.2  Official 3.11.2 release
     --     -- 3.12.1  Official 3.12.1 release
     --     -- 4.00.0  Official 4.00.0 release
     --     -- 4.00.1  Official 4.00.1 release
@@ -45,13 +44,15 @@ If you want to build the application on your own:
     --     -- 4.02.0  Official 4.02.0 release
     --     -- 4.02.1  Official 4.02.1 release
     --     -- 4.02.2  Official 4.02.2 release
+    --     -- 4.02.3  Official 4.02.3 release
     system  C system  System compiler (4.02.1)
+
     ```
 
-    The `C` letter shows the current compiler. Here it's a 4.02.1 version installed at a system level (ie in `/usr/local/bin/` for instance). We can see that a more recent version is available (4.02.2). So we will install it with `opam switch 4.02.2`. This won't remove the system compiler as `opam` will install the files in your `.opam` directory.
+    The `C` letter shows the current compiler. Here it's a 4.02.1 version installed at a system level (ie in `/usr/local/bin/` for instance). We can see that a more recent version is available (4.02.3). So we will install it with `opam switch 4.02.3`. This won't remove the system compiler as `opam` will install the files in your `.opam` directory.
 
     ```sh
-    > opam switch 4.02.2
+    > opam switch 4.02.3
     > eval `opam config env`
     ```
 
@@ -59,14 +60,14 @@ If you want to build the application on your own:
 
     ```sh
     > opam switch
-    --     -- 3.11.2  Official 3.11.2 release
     --     -- 3.12.1  Official 3.12.1 release
     --     -- 4.00.0  Official 4.00.0 release
     --     -- 4.00.1  Official 4.00.1 release
     --     -- 4.01.0  Official 4.01.0 release
     --     -- 4.02.0  Official 4.02.0 release
     --     -- 4.02.1  Official 4.02.1 release
-    4.02.2  C 4.02.2  Official 4.02.2 release
+    --     -- 4.02.2  Official 4.02.2 release
+    4.02.3  C 4.02.3  Official 4.02.3 release
     system  I system  System compiler (4.02.1)
     ```
 
