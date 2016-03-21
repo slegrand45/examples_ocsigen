@@ -1,0 +1,43 @@
+div#lsystem {
+	margin: auto;
+	width: 100%;
+	height: 95vh;
+	background-color: black;
+}
+
+svg {
+	margin: auto;
+	width: 100%;
+	height: 100%;
+	background-color: black;
+}
+
+.depth0 {	
+	stroke: DarkOrange;
+	fill: DarkOrange;
+	stroke-width: 0.15%;
+}
+
+.depth1 {	
+	stroke: Orange;
+	fill: Orange;
+	stroke-width: 0.13%;
+}
+
+.depth2 {	
+	stroke: GoldenRod;
+	fill: GoldenRod;
+	stroke-width: 0.11%;
+}
+
+.depth3 {	
+	stroke: Gold;
+	fill: Gold;
+	stroke-width: 0.09%;
+}
+
+.depth4 {	
+	stroke: Yellow;
+	fill: Yellow;
+	stroke-width: 0.07%;
+}

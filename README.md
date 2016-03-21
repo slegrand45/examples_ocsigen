@@ -17,3 +17,6 @@
   - Source: [https://github.com/slegrand45/examples_ocsigen/tree/master/jsoo/pong](https://github.com/slegrand45/examples_ocsigen/tree/master/jsoo/pong)
   - Demo: [http://slegrand45.github.io/examples_ocsigen.site/jsoo/pong/](http://slegrand45.github.io/examples_ocsigen.site/jsoo/pong/)
 
+- Draw a plant with SVG and L-System: http://algorithmicbotany.org/papers/abop/abop.pdf
+  - Source: [https://github.com/slegrand45/examples_ocsigen/tree/master/jsoo/lsystem](https://github.com/slegrand45/examples_ocsigen/tree/master/jsoo/lsystem)
+  - Demo: [http://slegrand45.github.io/examples_ocsigen.site/jsoo/lsystem/](http://slegrand45.github.io/examples_ocsigen.site/jsoo/lsystem/)
