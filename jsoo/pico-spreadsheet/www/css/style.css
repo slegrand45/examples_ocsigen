@@ -1,0 +1,67 @@
+table {
+	margin: auto;
+	color: #333;
+	font-family: Helvetica, Arial, sans-serif;
+	border-spacing: 0;
+}
+
+tbody td {
+	padding: 1em;
+	border: 1px solid transparent;
+	transition: all 0.3s;
+}
+
+tbody td {
+	background: #FAFAFA;
+	text-align: right;
+	width: 5.25em;
+}
+
+tbody td input {
+	width: 5em;
+}
+
+tbody tr:nth-child(even) td {
+	background: #F1F1F1;
+}
+
+tbody tr:nth-child(odd) td {
+	background: #FEFEFE;
+} 
+
+tbody tr td:hover {
+	background: #666;
+	color: #FFF;
+}
+
+tfoot td {
+	font-weight: bold;
+	text-align: right;
+	padding: 1em;
+	border-top: 1px solid black;
+}
+
+svg {
+	margin: auto;
+	display: block;
+	background-color: PaleGreen;
+}
+
+svg circle {
+	stroke: white;
+	stroke-width: 3;
+	fill: #00554d;
+}
+
+svg path {
+	fill: DarkGreen;
+}
+
+div.comments {
+	margin: auto;
+	padding-top: 1em;
+	padding-bottom: 2em;
+	font-family: Helvetica, Arial, sans-serif;
+	font-weight: bold;
+	text-align: center;
+}

@@ -20,3 +20,7 @@
 - Draw a plant with SVG and L-System: http://algorithmicbotany.org/papers/abop/abop.pdf
   - Source: [https://github.com/slegrand45/examples_ocsigen/tree/master/jsoo/lsystem](https://github.com/slegrand45/examples_ocsigen/tree/master/jsoo/lsystem)
   - Demo: [http://slegrand45.github.io/examples_ocsigen.site/jsoo/lsystem/](http://slegrand45.github.io/examples_ocsigen.site/jsoo/lsystem/)
+
+- Pico spreadsheet: editable cells with a reactive SVG graph and a reactive sums line.
+  - Source: [https://github.com/slegrand45/examples_ocsigen/tree/master/jsoo/pico-spreadsheet](https://github.com/slegrand45/examples_ocsigen/tree/master/jsoo/pico-spreadsheet)
+  - Demo: [http://slegrand45.github.io/examples_ocsigen.site/jsoo/pico-spreadsheet/](http://slegrand45.github.io/examples_ocsigen.site/jsoo/pico-spreadsheet/)
