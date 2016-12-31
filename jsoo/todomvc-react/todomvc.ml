@@ -185,7 +185,7 @@ module View = struct
         a_input_type `Text ;
         a_class ["new-todo"] ;
         a_placeholder "What needs to be done?" ;
-        a_autofocus `Autofocus ;
+        a_autofocus () ;
       ] ())
 
   let task_input_dom =
@@ -227,7 +227,7 @@ module View = struct
                 focus_task_input () ;
                 true
               )]
-          in if todo.completed then a_checked `Checked :: l else l
+          in if todo.completed then a_checked () :: l else l
         ) ())
     in
 
@@ -318,7 +318,7 @@ module View = struct
     let rl = ReactiveData.RList.map (todo_item (r, f)) rl in
     Html5.(section ~a:[a_class ["main"]; R.Html5.a_style (React.S.map css_visibility react_tasks) ] [
         Html5.input
-          ~a:( (R.filter_attrib (a_checked `Checked) (React.S.map toggle_input_checked react_tasks)) :: [
+          ~a:( (R.filter_attrib (a_checked ()) (React.S.map toggle_input_checked react_tasks)) :: [
               a_input_type `Checkbox ;
               a_class ["toggle-all"] ;
               a_onclick (fun _ ->
@@ -328,7 +328,7 @@ module View = struct
                   true
                 ) ;
             ]) () ;
-        label ~a:[a_for "toggle-all"] [pcdata "Mark all as complete"] ;
+        label ~a:[a_label_for "toggle-all"] [pcdata "Mark all as complete"] ;
         R.Html5.ul ~a:[a_class ["todo-list"]] rl
       ])
 
@@ -378,7 +378,7 @@ module View = struct
     let react_tasks = React.S.map (fun m -> m.Model.tasks) r in
     let html =
       footer ~a:[a_class ["footer"];
-                 (R.filter_attrib (a_hidden `Hidden) (React.S.map footer_hidden react_tasks))] [
+                 (R.filter_attrib (a_hidden ()) (React.S.map footer_hidden react_tasks))] [
         span ~a:[a_class ["todo-count"]] [
           strong ~a:[] [R.Html5.pcdata (React.S.map nb_left react_tasks)] ;
           R.Html5.pcdata (React.S.map item_left react_tasks)
@@ -386,7 +386,7 @@ module View = struct
         R.Html5.ul ~a:[a_class ["filters"]]
           (ReactiveData.RList.from_signal (React.S.map vswap r)) ;
         button
-          ~a:((R.filter_attrib (a_hidden `Hidden) (React.S.map button_hidden react_tasks)) :: a_button) [
+          ~a:((R.filter_attrib (a_hidden ()) (React.S.map button_hidden react_tasks)) :: a_button) [
           pcdata "Clear completed"
         ];
       ]
