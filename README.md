@@ -1,7 +1,7 @@
 
 ## Examples with Eliom
 
-- A very simple example of using [Eliom services](https://ocsigen.org/eliom/dev/manual/clientserver-communication]) for the server side with [OCaml Vdom](https://github.com/LexiFi/ocaml-vdom) for the client side.
+- A very simple example of using [Eliom services](https://ocsigen.org/eliom/dev/manual/clientserver-communication) for the server side with [OCaml Vdom](https://github.com/LexiFi/ocaml-vdom) for the client side.
     - Source: [https://github.com/slegrand45/examples_ocsigen/tree/master/eliom/with-ocaml-vdom/simple/](https://github.com/slegrand45/examples_ocsigen/tree/master/eliom/with-ocaml-vdom/simple/)
 
 
