@@ -1,0 +1,8 @@
+* {
+    font-family: sans-serif;
+}
+
+h1, div {
+	text-align: center;
+	padding-bottom: 2em;
+}
