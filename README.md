@@ -30,3 +30,7 @@
 - Pico spreadsheet: editable cells with a reactive SVG graph and a reactive sums line.
   - Source: [https://github.com/slegrand45/examples_ocsigen/tree/master/jsoo/pico-spreadsheet](https://github.com/slegrand45/examples_ocsigen/tree/master/jsoo/pico-spreadsheet)
   - Demo: [http://slegrand45.github.io/examples_ocsigen.site/jsoo/pico-spreadsheet/](http://slegrand45.github.io/examples_ocsigen.site/jsoo/pico-spreadsheet/)
+
+- How to build and download a CSV file without any server processing and only from client side data.
+  - Source: [https://github.com/slegrand45/examples_ocsigen/tree/master/jsoo/build-local-csv-file](https://github.com/slegrand45/examples_ocsigen/tree/master/jsoo/build-local-csv-file)
+  - Demo: [http://slegrand45.github.io/examples_ocsigen.site/jsoo/build-local-csv-file/](http://slegrand45.github.io/examples_ocsigen.site/jsoo/build-local-csv-file/)
