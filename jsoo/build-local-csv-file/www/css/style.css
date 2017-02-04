@@ -1,0 +1,43 @@
+table {
+	margin: auto;
+	color: #333;
+	font-family: Helvetica, Arial, sans-serif;
+	border-spacing: 0;
+}
+
+tbody td {
+	padding: 1em;
+	border: 1px solid transparent;
+	transition: all 0.3s;
+}
+
+tbody td {
+	background: #FAFAFA;
+	text-align: right;
+	width: 5.25em;
+}
+
+tbody tr:nth-child(even) td {
+	background: #F1F1F1;
+}
+
+tbody tr:nth-child(odd) td {
+	background: #FEFEFE;
+} 
+
+tfoot td {
+	font-weight: bold;
+	text-align: right;
+	padding: 1em;
+	border-top: 1px solid black;
+}
+
+.tiny-csv, .big-csv {
+	margin-top: 2em;
+	text-align: center;
+}
+
+.comments {
+	text-align: center;
+	margin: 2em;
+}
