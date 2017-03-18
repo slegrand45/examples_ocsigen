@@ -1,0 +1,1 @@
+val body : Language.t -> Money.Iso4217.iso -> [ `Body ] Eliom_content.Html.elt

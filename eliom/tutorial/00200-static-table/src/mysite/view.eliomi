@@ -1,0 +1,1 @@
+val body : [ `Body ] Eliom_content.Html.elt
