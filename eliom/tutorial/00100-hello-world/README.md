@@ -74,4 +74,4 @@
 
 ## Next step
 
-  In the [next tutorial](../00200-static-table/README.md), we will see how to create a much more interesting web page.
+  In the [next tutorial](../00200-static-table/), we will see how to create a much more interesting web page.

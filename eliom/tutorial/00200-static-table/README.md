@@ -129,4 +129,4 @@ Obviously, `TyXML` needs a multitude of functions to be able to build all the HT
 
 ## Next step
 
-  In the next tutorial, we will see how to use a parameter in the URL to set the language and how to add an input select to choose the currency.
+  In the [next tutorial](../00300-url-param/), we will see how to use a parameter in the URL to set the language and how to add an input select to choose the currency.
