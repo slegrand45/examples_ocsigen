@@ -110,13 +110,28 @@ let select_iso4217 iso4217 =
 
 ```
 
-  As this binding is obviously only on the browser side, we put the code in a `[%client ... ]` section. Next, we use `Lwt_js_events.changes` to execute a function each time a change event happens on the select element.
-  
+  As this binding is obviously only on the browser side, we put the code in a `[%client ... ]` section. Next, we use `Lwt_js_events.changes` to execute a function each time a change event happens on the select element. Note that, as `select_element` is defined on the server side and as this code section is on the client side, we get access to `select_element` with the `~%` syntax. In this function, we get the selected option value as a string and convert it to a value of type `Money.Iso4217.iso`. Then we use `Eliom_client.change_page` to refresh the page with the new URL parameter.
+
 
 ## Display a link with parameter
 
+To display a link to a service, we use the `Eliom_content.Html.F.a` function. The arguments are the service, the link text and the URL service parameters.
 
-
+```ocaml
+let links_languages lang iso4217 =
+  let l = [(Language.En, "EN"); (Language.Fr, "FR")] in
+  let f acc (lang', s) =
+    match lang' with
+    | v when v = lang ->
+      Html.F.(
+        span ~a:[a_class ["level-item"]] [pcdata s]) :: acc
+    | v ->
+      Html.F.(
+        span ~a:[a_class ["level-item"]] [a Service.main [pcdata s] (Some v, Some iso4217)])
+      :: acc
+  in
+  List.rev(List.fold_left f [] l)
+```
 
 
 ## Next step
