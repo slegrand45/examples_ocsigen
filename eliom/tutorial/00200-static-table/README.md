@@ -44,7 +44,7 @@ In `mysite.eliom`, we create an external CSS link to download the Bulma style sh
           make_uri
             ~service:(Eliom_service.static_dir ())
             ~https:true ~hostname:"cdnjs.cloudflare.com"
-            ["ajax"; "libs"; "bulma"; "0.3.1"; "css"; "bulma.min.css"]
+            ["ajax"; "libs"; "bulma"; "0.4.0"; "css"; "bulma.min.css"]
         ) ()
     )
 ```
