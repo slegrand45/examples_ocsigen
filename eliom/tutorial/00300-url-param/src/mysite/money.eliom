@@ -68,6 +68,18 @@
       let of_int64 v iso =
         of_num (Num.num_of_string(Int64.to_string v)) iso
 
+      let of_string v iso =
+        let accuracy_float = 10000. in
+        let accuracy_int = 10000 in
+        let x =
+          (float_of_string v) *. accuracy_float
+          |> Int64.of_float
+          |> Int64.to_string
+          |> Num.num_of_string
+        in
+        let x = Num.div_num x (Num.num_of_int accuracy_int) in
+        of_num x iso
+
       let (+) (v1:'a t) (v2:'a t) : 'a t =
         let x1, iso = v1 in
         let x2, iso = v2 in

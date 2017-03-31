@@ -32,6 +32,7 @@
       val of_num : Num.num -> 'a Iso4217.t -> 'a t
       val of_int : int -> 'a Iso4217.t -> 'a t
       val of_int64 : Int64.t -> 'a Iso4217.t -> 'a t
+      val of_string : string -> 'a Iso4217.t -> 'a t
 
       val (+) : 'a t -> 'a t -> 'a t
       val mult_by_num : Num.num -> 'a t -> 'a t
