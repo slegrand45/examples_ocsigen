@@ -3,7 +3,7 @@ open Eliom_content
 type msg =
   | List of I18n.t list
   | Title
-  | NoProduct
+  | No_product
   | Col_code
   | Col_name
   | Col_price
@@ -41,7 +41,7 @@ let _t msg lang =
           make Language.En "List of products" ;
           make Language.Fr "Liste des produits" ;
         ]
-      | NoProduct -> [
+      | No_product -> [
           make Language.En "No product" ;
           make Language.Fr "Aucun produit" ;
         ]
@@ -104,7 +104,7 @@ let body =
           h1 ~a:[a_class ["title"]] [ pcdata (_t Title Config.default_language) ] ;
           div [
             if List.length Model.products = 0 then (
-              p [ pcdata (_t NoProduct Config.default_language)]
+              p [ pcdata (_t No_product Config.default_language)]
             ) else (
               table_of_products Model.products
             )

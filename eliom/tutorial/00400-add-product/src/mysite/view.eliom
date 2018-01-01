@@ -2,11 +2,16 @@ open Eliom_content
 
 type msg =
   | List of I18n.t list
-  | Title
+  | Title_list
+  | Back_to_list
+  | Title_add
+  | Add_product
   | No_product
-  | Col_code
-  | Col_name
-  | Col_price
+  | Field_code
+  | Field_name
+  | Field_price
+  | Save
+  | Quit
 
 let price_to_string lang l iso4217 =
   let string_idiom p =
@@ -37,25 +42,45 @@ let _t msg lang =
     I18n.(
       match msg with
       | List v -> v
-      | Title -> [
+      | Title_list -> [
           make Language.En "List of products" ;
           make Language.Fr "Liste des produits" ;
+        ]
+      | Back_to_list -> [
+          make Language.En "Back to list" ;
+          make Language.Fr "Retour à la liste" ;
+        ]
+      | Title_add -> [
+          make Language.En "Add a product" ;
+          make Language.Fr "Ajouter un produit" ;
+        ]
+      | Add_product -> [
+          make Language.En "Add a product" ;
+          make Language.Fr "Ajouter un produit" ;
         ]
       | No_product -> [
           make Language.En "No product" ;
           make Language.Fr "Aucun produit" ;
         ]
-      | Col_code -> [
+      | Field_code -> [
           make Language.En "Code" ;
           make Language.Fr "Code" ;
         ]
-      | Col_name -> [
+      | Field_name -> [
           make Language.En "Name" ;
           make Language.Fr "Nom" ;
         ]
-      | Col_price -> [
+      | Field_price -> [
           make Language.En "Unit price" ;
           make Language.Fr "Prix à l'unité" ;
+        ]
+      | Save -> [
+          make Language.En "Save" ;
+          make Language.Fr "Enregistrer" ;
+        ]
+      | Quit -> [
+          make Language.En "Quit" ;
+          make Language.Fr "Quitter" ;
         ]
     )
   in
@@ -128,10 +153,10 @@ let table_of_products lp lang iso4217 =
       ~a:[a_class ["table"; "is-striped"]]
       ~thead:(thead [
         tr [
-          th [ pcdata (_t Col_code lang) ] ;
-          th [ pcdata (_t Col_name lang) ] ;
+          th [ pcdata (_t Field_code lang) ] ;
+          th [ pcdata (_t Field_name lang) ] ;
           th ~a:[a_class ["price"]] [
-            pcdata (_t Col_price lang) ;
+            pcdata (_t Field_price lang) ;
             select_element ;
           ] ;
         ]
@@ -140,8 +165,13 @@ let table_of_products lp lang iso4217 =
     ]
   )
 
-let links_languages lang iso4217 =
+let links_languages title lang iso4217 =
   let l = [(Language.En, "EN"); (Language.Fr, "FR")] in
+  let service =
+    match title with
+    | Title_add -> fst Service.add
+    | _ -> Service.main
+  in
   let f acc (lang', s) =
     match lang' with
     | v when v = lang ->
@@ -149,34 +179,120 @@ let links_languages lang iso4217 =
         span ~a:[a_class ["level-item"]] [pcdata s]) :: acc
     | v ->
       Html.F.(
-        span ~a:[a_class ["level-item"]] [a Service.main [pcdata s] (Some v, Some iso4217)])
+        span ~a:[a_class ["level-item"]] [a service [pcdata s] (Some v, Some iso4217)])
       :: acc
   in
   List.rev(List.fold_left f [] l)
 
-let navigation lang iso4217 =
+let navigation page_title lang iso4217 =
+  let bt =
+    match page_title with
+    | Title_add ->
+        Html.F.(
+          a ~a:[a_class ["button"]] ~service:Service.main [pcdata (_t Back_to_list lang)] (Some lang, Some iso4217)
+        )
+    | _ ->
+        Html.F.(
+          a ~a:[a_class ["button"]] ~service:(fst Service.add) [pcdata (_t Add_product lang)] (Some lang, Some iso4217)
+        )
+  in
   Html.F.(
     nav ~a:[a_class ["level is-mobile"]] [
       div ~a:[a_class ["level-left"]] [
         div ~a:[a_class ["level-item"]] [
-          h1 ~a:[a_class ["title"]] [ pcdata (_t Title lang) ]
+          bt
         ]
       ] ;
-      div ~a:[a_class ["level-right"]] (links_languages lang iso4217) ;
+      div ~a:[a_class ["level-center"]] [
+        div ~a:[a_class ["level-item"]] [
+          h1 ~a:[a_class ["title"]] [ pcdata (_t page_title lang) ]
+        ]
+      ] ;
+      div ~a:[a_class ["level-right"]] (links_languages page_title lang iso4217) ;
     ]
   )
 
-let body lang iso4217 =
+let list lang iso4217 () =
+  let products = Model.get_products () in
   Html.F.(
     body [
       div ~a:[a_class ["container"]] [
-        navigation lang iso4217 ;
+        navigation Title_list lang iso4217 ;
         div [
-          if List.length Model.products = 0 then (
-            p [ pcdata (_t No_product lang)]
+          if List.length products = 0 then (
+            p [ pcdata (_t No_product lang) ]
           ) else (
-            table_of_products Model.products lang iso4217
+            table_of_products products lang iso4217
           )
+        ]
+      ]
+    ]
+  )
+
+let add lang iso4217 (product_code, (product_name, product_price)) =
+  let () =
+    let price =
+      match iso4217 with
+      | Money.Iso4217.Iso iso ->
+          Money.(Vat.Amount(Vat.excl(Currency.of_string product_price iso)))
+    in
+    let p = Product.(empty
+      |> set_code product_code
+      |> set_names [ I18n.make lang product_name ]
+      |> set_prices [ price ])
+    in
+    Model.add_product p
+  in
+  list lang iso4217 ()
+
+let create_form_add lang iso4217 (product_code, (product_name, product_price)) =
+  Html.F.([
+    div ~a:[a_class ["field"]] [
+      label ~a:[a_class ["label"]] [ pcdata (_t Field_code lang) ] ;
+      p ~a:[a_class ["control"]] [
+        Form.input ~a:[a_class ["input"]]
+          ~input_type:`Text ~name:product_code
+          Form.string
+      ]
+    ] ;
+    div ~a:[a_class ["field"]] [
+      label ~a:[a_class ["label"]] [ pcdata (_t Field_name lang) ] ;
+      p ~a:[a_class ["control"]] [
+        Form.input ~a:[a_class ["input"]]
+          ~input_type:`Text ~name:product_name
+          Form.string
+      ]
+    ] ;
+    div ~a:[a_class ["field"]] [
+      label ~a:[a_class ["label"]] [ pcdata (_t Field_price lang) ] ;
+      p ~a:[a_class ["control"]] [
+        Form.input ~a:[a_class ["input"]]
+          ~input_type:`Text ~name:product_price
+          Form.string
+      ]
+    ] ;
+    div ~a:[a_class ["field"; "is-grouped"]] [
+      div ~a:[a_class ["control"; "is-expanded"]] [
+        Form.input ~a:[a_class ["input"]]
+          ~input_type:`Submit ~value:(_t Save lang)
+          Form.string ;
+      ] ;
+      div ~a:[a_class ["control"; "is-expanded"]] [
+        a ~a:[a_class ["button"; "is-fullwidth"]] ~service:Service.main [
+          pcdata (_t Quit lang)
+        ] (Some lang, Some iso4217)
+      ]
+    ]
+  ])
+
+let form_add lang iso4217 () =
+  Html.F.(
+    body [
+      div ~a:[a_class ["container"]] [
+        navigation Title_add lang iso4217 ;
+        div [
+          (* Use the POST service to manage the form submit *)
+          Form.post_form ~service:(snd Service.add) (create_form_add lang iso4217) (Some lang, Some iso4217)
         ]
       ]
     ]
