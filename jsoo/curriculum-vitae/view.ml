@@ -10,12 +10,12 @@ let part_header (r, f) =
             a ~a:[
                 a_href "#" ;
                 a_onclick (fun _ -> (Controller.update (Action.Update_lang I18n.En) (r, f)); true)
-              ] [ pcdata "En" ] ;
-            pcdata " | " ;
+              ] [ txt "En" ] ;
+            txt " | " ;
             a ~a:[
                 a_href "#" ;
                 a_onclick (fun _ -> (Controller.update (Action.Update_lang I18n.Fr) (r, f)); true)
-              ] [ pcdata "Fr" ] ;
+              ] [ txt "Fr" ] ;
           ] ;
         ]
       ])
@@ -27,19 +27,19 @@ let part_contact (r, _) =
     Html5.(
       let v = I18n.translate (CV.lang cv) v in
       if v <> "" then
-        p [ i ~a:[a_class ["material-icons"; "red-text"]] [ pcdata icon] ;
-            pcdata v ; br () ]
+        p [ i ~a:[a_class ["material-icons"; "red-text"]] [ txt icon] ;
+            txt v ; br () ]
       else
-        p [ pcdata "" ]
+        p [ txt "" ]
     )
   in
   let part_with_href icon prefix v =
     Html5.(
       if v <> "" then
-        p [ i ~a:[a_class ["material-icons"; "red-text"]] [ pcdata icon] ;
-            a ~a:[a_href (prefix ^ v)] [ pcdata v ] ; br () ]
+        p [ i ~a:[a_class ["material-icons"; "red-text"]] [ txt icon] ;
+            a ~a:[a_href (prefix ^ v)] [ txt v ] ; br () ]
       else
-        p [ pcdata "" ]
+        p [ txt "" ]
     )
   in
   let rl_address = ReactiveData.RList.from_signal (React.S.map (fun (_, cv) -> let id = CV.id cv in [(cv, ID.address id)]) r) in
@@ -53,15 +53,15 @@ let part_contact (r, _) =
   Html5.(
     div ~a:[a_class ["block"]] [
       h5 [
-        i ~a:[a_class ["material-icons"]] [ pcdata "message"] ;
-        R.Html5.pcdata rl_title ;
+        i ~a:[a_class ["material-icons"]] [ txt "message"] ;
+        R.Html5.txt rl_title ;
       ] ;
       R.Html5.div rl_address ;
       R.Html5.div rl_phone ;
       p [
-        i ~a:[a_class ["material-icons"; "red-text"]] [ pcdata "email"] ;
+        i ~a:[a_class ["material-icons"; "red-text"]] [ txt "email"] ;
         a ~a:[R.Html5.a_href (React.S.map (fun email -> "mailto:" ^ email) rl_email)] [
-          R.Html5.pcdata rl_email
+          R.Html5.txt rl_email
         ] ;
         br () ;
       ] ;
@@ -74,7 +74,7 @@ let one_skill (cv, s) =
   let width = Printf.sprintf "width: %d%%;" s.Skill.percent in
   Html5.(
     div [
-      h6 [ pcdata (I18n.translate (CV.lang cv) s.Skill.title) ] ;
+      h6 [ txt (I18n.translate (CV.lang cv) s.Skill.title) ] ;
       div ~a:[a_class ["progress"]] [
         div ~a:[a_class ["progress-bar"]; a_style width] []
       ] ;
@@ -89,8 +89,8 @@ let part_skill (r, _) =
   Html5.(
     div ~a:[a_class ["block"]] [
       h5 [
-        i ~a:[a_class ["material-icons"]] [ pcdata "stars"] ;
-        R.Html5.pcdata rl_title ;
+        i ~a:[a_class ["material-icons"]] [ txt "stars"] ;
+        R.Html5.txt rl_title ;
       ] ;
       R.Html5.div rl
     ]
@@ -99,8 +99,8 @@ let part_skill (r, _) =
 let one_language (cv, l) =
   Html5.(
     div [
-      h6 [ pcdata (I18n.translate (CV.lang cv) l.Language.title) ] ;
-      p [ pcdata (I18n.translate (CV.lang cv) l.Language.description) ] ;
+      h6 [ txt (I18n.translate (CV.lang cv) l.Language.title) ] ;
+      p [ txt (I18n.translate (CV.lang cv) l.Language.description) ] ;
       br () ;
     ]
   )
@@ -112,8 +112,8 @@ let part_language (r, _) =
   Html5.(
     div ~a:[a_class ["block"]] [
       h5 [
-        i ~a:[a_class ["material-icons"]] [ pcdata "language"] ;
-        R.Html5.pcdata rl_title ;
+        i ~a:[a_class ["material-icons"]] [ txt "language"] ;
+        R.Html5.txt rl_title ;
       ] ;
       R.Html5.div rl
     ]
@@ -137,8 +137,8 @@ let one_work (cv, w) =
     match s_company_location with
     | "" -> []
     | _ -> Html5.([
-        i ~a:[a_class ["material-icons"; "red-text"]] [ pcdata "place"] ;
-        pcdata s_company_location ;
+        i ~a:[a_class ["material-icons"; "red-text"]] [ txt "place"] ;
+        txt s_company_location ;
       ])
   in
   let s_date = Date.translate_start_end (CV.lang cv) 
@@ -148,16 +148,16 @@ let one_work (cv, w) =
     match s_date with
     | "" -> []
     | _ -> Html5.([
-        i ~a:[a_class ["material-icons"; "red-text"]] [ pcdata "date_range"] ;
-        pcdata s_date ;
+        i ~a:[a_class ["material-icons"; "red-text"]] [ txt "date_range"] ;
+        txt s_date ;
       ])
   in
   Html5.(
     div ~a:[a_class ["block"]] [
-      h5 [ pcdata (I18n.translate (CV.lang cv) w.Experience.title) ] ;
+      h5 [ txt (I18n.translate (CV.lang cv) w.Experience.title) ] ;
       p (html_company_location @ html_date) ;
       p [
-        pcdata (I18n.translate (CV.lang cv) w.Experience.description)
+        txt (I18n.translate (CV.lang cv) w.Experience.description)
       ]
     ]
   )
@@ -168,8 +168,8 @@ let part_work (r, _) =
   let rl = ReactiveData.RList.map one_work rl in
   Html5.([
     h3 [
-      i ~a:[a_class ["material-icons"]] [ pcdata "group" ] ;
-        R.Html5.pcdata rl_title ;
+      i ~a:[a_class ["material-icons"]] [ txt "group" ] ;
+        R.Html5.txt rl_title ;
     ] ;
     R.Html5.div rl
   ])
@@ -185,8 +185,8 @@ let one_education (cv, e) =
     match s_school with
     | "" -> []
     | _ -> Html5.([
-        i ~a:[a_class ["material-icons"; "red-text"]] [ pcdata "place"] ;
-        pcdata s_school ;
+        i ~a:[a_class ["material-icons"; "red-text"]] [ txt "place"] ;
+        txt s_school ;
       ])
   in
   let s_date = Date.translate_start_end (CV.lang cv) 
@@ -196,16 +196,16 @@ let one_education (cv, e) =
     match s_date with
     | "" -> []
     | _ -> Html5.([
-        i ~a:[a_class ["material-icons"; "red-text"]] [ pcdata "date_range"] ;
-        pcdata s_date ;
+        i ~a:[a_class ["material-icons"; "red-text"]] [ txt "date_range"] ;
+        txt s_date ;
       ])
   in
   Html5.(
     div ~a:[a_class ["block"]] [
-      h5 [ pcdata (I18n.translate (CV.lang cv) e.Education.title) ] ;
+      h5 [ txt (I18n.translate (CV.lang cv) e.Education.title) ] ;
       p (html_school @ html_date) ;
       p [
-        pcdata (I18n.translate (CV.lang cv) e.Education.description)      
+        txt (I18n.translate (CV.lang cv) e.Education.description)      
       ]
     ]
   )
@@ -222,8 +222,8 @@ let part_education (r, _) =
   in
   Html5.([
     h3 [
-      i ~a:[a_class ["material-icons"]] [ pcdata "school" ] ;
-        R.Html5.pcdata rl_title ;
+      i ~a:[a_class ["material-icons"]] [ txt "school" ] ;
+        R.Html5.txt rl_title ;
     ] ;
     R.Html5.div (rl Education.diploma) ;
   ])
@@ -236,10 +236,10 @@ let one_portfolio_details cv n info (r, f) =
           div ~a:[a_class ["mdl-layout-spacer"]] [] ;
           i ~a:[a_class ["material-icons"] ;
             a_onclick (fun _ -> (Controller.update (Action.Portfolio_summary n) (r, f)); true)]
-            [ pcdata "close" ]
+            [ txt "close" ]
         ] ;
         div ~a:[a_class ["mdl-card__supporting-text"]] [
-          pcdata (I18n.translate (CV.lang cv) (info.Portfolio.description))
+          txt (I18n.translate (CV.lang cv) (info.Portfolio.description))
         ] ;        
       ]
     ]
@@ -255,11 +255,11 @@ let one_portfolio_summary cv n info (r, f) =
                     ~alt:"Portfolio image" ()
         ] ;
         div ~a:[a_class ["mdl-card__actions"; "mdl-card--border"]] [
-          pcdata (I18n.translate (CV.lang cv) (info.Portfolio.title)) ;
+          txt (I18n.translate (CV.lang cv) (info.Portfolio.title)) ;
           div ~a:[a_class ["mdl-layout-spacer"]] [] ;
           i ~a:[a_class ["material-icons"] ;
             a_onclick (fun _ -> (Controller.update (Action.Portfolio_details n) (r, f)); true)]
-            [ pcdata "more_vert" ]
+            [ txt "more_vert" ]
         ] ;
       ]
     ]
@@ -284,8 +284,8 @@ let part_portfolio (r, f) =
   ) in
   Html5.([
     h3 [
-      i ~a:[a_class ["material-icons"]] [ pcdata "apps" ] ;
-        R.Html5.pcdata rl_title ;
+      i ~a:[a_class ["material-icons"]] [ txt "apps" ] ;
+        R.Html5.txt rl_title ;
     ] ;
     R.Html5.div ~a:[a_class ["mdl-grid"; "portfolio"]] rlp
   ])
@@ -295,18 +295,18 @@ let part_footer () =
     footer ~a:[a_class ["mdl-mini-footer"]] [
       div ~a:[a_class ["mdl-mini-footer__left-section"]] [
         div ~a:[a_class ["mdl-logo"]] [
-          pcdata "Credits: " ;
+          txt "Credits: " ;
           a ~a:[a_href "http://articles.novoresume.com/luke-who-is-searching-for-a-job/"]
-            [ pcdata "Novorésumé - Darth Vader Résumé" ] ;
-          pcdata ", " ;
+            [ txt "Novorésumé - Darth Vader Résumé" ] ;
+          txt ", " ;
           a ~a:[a_href "http://demo.themesafari.net/materialize-responsive-resume/"]
-            [ pcdata "Materialize responsive résumé template" ] ;
-          pcdata ", " ;
+            [ txt "Materialize responsive résumé template" ] ;
+          txt ", " ;
           a ~a:[a_href "http://media.photobucket.com/user/bdpopeye/media/popeyes%20pix/DarthVader1-1.jpg.html"]
-            [ pcdata "Darth Vader photo" ] ;
-          pcdata ", " ;
+            [ txt "Darth Vader photo" ] ;
+          txt ", " ;
           a ~a:[a_href "http://www.freedigitalphotos.net"]
-            [ pcdata "Portfolio images courtesy of Apolonia, stockimages and zole4 at FreeDigitalPhotos.net" ] ;
+            [ txt "Portfolio images courtesy of Apolonia, stockimages and zole4 at FreeDigitalPhotos.net" ] ;
         ]
       ] ;
       div ~a:[a_class ["mdl-mini-footer__right-section"]] [
@@ -336,12 +336,12 @@ let view (r, f) =
                     ~src:"img/darth-vader.jpg"
                     ~alt:"Selfie" () ;
                   div ~a:[a_class ["block"]] [
-                    h5 ~a:[a_class ["center"; "red-text"]] [ R.Html5.pcdata rl_name ] ;
-                    p ~a:[a_class ["light"]] [ R.Html5.pcdata rl_title ] ;
+                    h5 ~a:[a_class ["center"; "red-text"]] [ R.Html5.txt rl_name ] ;
+                    p ~a:[a_class ["light"]] [ R.Html5.txt rl_title ] ;
                   ] ;
                   hr ();
                   div ~a:[a_class ["block"; "center"]] [
-                    h5 [ R.Html5.pcdata rl_description ] ;
+                    h5 [ R.Html5.txt rl_description ] ;
                   ] ;
                   part_contact (r, f) ;
                   part_skill (r, f) ;

@@ -1,5 +1,6 @@
 open Lwt.Infix
 open Types
+open Js_of_ocaml
 
 let main _ =
   let doc = Dom_html.document in

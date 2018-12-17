@@ -3,6 +3,7 @@
    http://algorithmicbotany.org/papers/abop/abop.pdf *)
 
 open Lwt.Infix
+open Js_of_ocaml
 
 module Config = struct
 

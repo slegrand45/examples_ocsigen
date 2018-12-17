@@ -5,6 +5,7 @@
 *)
 
 open Lwt.Infix
+open Js_of_ocaml
 
 module Model = struct
 
@@ -139,7 +140,7 @@ module View = struct
     in
     let href = React.S.map (fun (v, _) -> match v with None -> "#" | Some h -> Js.to_string h) rs in
     Html.(a ~a:[a_onclick onclick; a_download (Some "tinyfile.csv");
-                R.Html.a_href href] [pcdata "Get CSV from above"])
+                R.Html.a_href href] [txt "Get CSV from above"])
 
   let link_big_csv (rs, rf) =
     let onclick evt =
@@ -148,13 +149,13 @@ module View = struct
     in
     let href = React.S.map (fun (_, v) -> match v with None -> "#" | Some h -> Js.to_string h) rs in
     Html.(a ~a:[a_onclick onclick; a_download (Some "bigfile.csv");
-                R.Html.a_href href] [pcdata "Get bigger CSV (not displayed)"])
+                R.Html.a_href href] [txt "Get bigger CSV (not displayed)"])
 
   let table (rs, rf) =
     let cells data =
       let line (acc, i) l =
         let f (acc, j) v =
-          let td = Html.(td [pcdata v]) in
+          let td = Html.(td [txt v]) in
           (td :: acc, j + 1)
         in
         let (ltd, _) = Array.fold_left f ([], 0) l in
@@ -171,11 +172,11 @@ module View = struct
     Html.(
       div [
         p ~a:[a_class ["comments"]] [
-          pcdata "How to build and download a CSV file without any server processing and only from client side data." ;
+          txt "How to build and download a CSV file without any server processing and only from client side data." ;
           br () ;
-          pcdata "This demo has been tested with Firefox, Chrome and Edge. But please note that a " ;
-          a ~a:[a_href "https://github.com/inexorabletash/text-encoding"] [ pcdata "polyfill" ] ;
-          pcdata " is necessary for Edge." ;
+          txt "This demo has been tested with Firefox, Chrome and Edge. But please note that a " ;
+          a ~a:[a_href "https://github.com/inexorabletash/text-encoding"] [ txt "polyfill" ] ;
+          txt " is necessary for Edge." ;
         ] ;
         div ~a:[a_class ["cells"]] [ cells ] ;
         div ~a:[a_class ["tiny-csv"]] [ link_tiny_csv (rs, rf) ] ;

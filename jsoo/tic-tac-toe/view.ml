@@ -21,7 +21,7 @@ let cell_row (r, f) board row cells_won =
     (Html5.(td ~a:[
          a_onclick (fun evt -> (Controller.update (Click_cell e) (r, f)); true) ;
          a_class cell_class
-       ] [pcdata s])) :: acc
+       ] [txt s])) :: acc
   in
   let ltd = List.rev(List.fold_left f [] cells) in
   Html5.(tr ltd)
@@ -45,14 +45,14 @@ let table_board ((r, f) : rp) =
 
 let info_header =
   Html5.(header ~a:[a_class ["info"]] [
-      p [pcdata "Reload the page (F5) to restart the game"]
+      p [txt "Reload the page (F5) to restart the game"]
     ])
 
 let info_footer =
   Html5.(footer ~a:[a_class ["info"]] [
       p [
-        pcdata "Tic-Tac-Toe - Written by " ;
-        a ~a:[a_href "https://stephanelegrand.wordpress.com/"] [pcdata "Stéphane Legrand"]
+        txt "Tic-Tac-Toe - Written by " ;
+        a ~a:[a_href "https://stephanelegrand.wordpress.com/"] [txt "Stéphane Legrand"]
       ] ;
     ])
 

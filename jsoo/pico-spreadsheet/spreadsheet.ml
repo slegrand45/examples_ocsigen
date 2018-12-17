@@ -1,6 +1,7 @@
 (* http://rvlasveld.github.io/blog/2013/07/02/creating-interactive-graphs-with-svg-part-1/ *)
 
 open Lwt.Infix
+open Js_of_ocaml
 
 module Model = struct
 
@@ -146,7 +147,7 @@ module View = struct
       let circles acc (v, x, y, r) =
         let c = Tyxml_js.Svg.(
             circle ~a:[a_cx (x, Some `Px); a_cy (y, Some `Px); a_r (r, Some `Px)] [
-              title (pcdata (Printf.sprintf "%.02f" v))
+              title (txt (Printf.sprintf "%.02f" v))
             ]
           )
         in
@@ -213,7 +214,7 @@ module View = struct
                   a_onblur blur_handler ;
                 ] ())
             ) else
-              Html5.pcdata s
+              Html5.txt s
           in
           let td = Html5.td ~a:[Html5.a_onclick onclick] [in_td] in
           (td :: acc, j + 1)
@@ -228,7 +229,7 @@ module View = struct
     let sum_cells (_, sums, _) =
       let f acc e =
         let s = Printf.sprintf "%.02f" e in
-        (Html5.(td [pcdata s])) :: acc
+        (Html5.(td [txt s])) :: acc
       in
       let ltd = List.rev(Array.fold_left f [] sums) in
       Html5.([tr ltd])
@@ -244,10 +245,10 @@ module View = struct
       div [
         div ~a:[a_class ["comments"]] [
           p [
-            pcdata "Click on a cell. Then type in a positive number and validate with the ENTER key."
+            txt "Click on a cell. Then type in a positive number and validate with the ENTER key."
           ] ;
           p [
-            pcdata "The sums and the chart will be automatically updated."
+            txt "The sums and the chart will be automatically updated."
           ] ;
         ] ;
         div ~a:[a_class ["graph"]] [ graph ] ;

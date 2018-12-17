@@ -1,3 +1,5 @@
+open Js_of_ocaml
+
 class type options = object
   method _type : string Js.readonly_prop
 end

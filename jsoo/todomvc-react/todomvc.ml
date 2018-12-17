@@ -1,4 +1,5 @@
 open Lwt.Infix
+open Js_of_ocaml
 
 (* Utility module for local storage. *)
 module Storage = struct
@@ -211,7 +212,7 @@ module View = struct
         (Controller.update (Update_field task_input_dom##.value) (r, f))) ;
 
     Html5.(header ~a:[a_class ["header"]] [
-        h1 [ pcdata "todos" ];
+        h1 [ txt "todos" ];
         task_input
       ])
 
@@ -283,7 +284,7 @@ module View = struct
               Controller.update (Editing_task (todo.id, true)) (r, f) ;
               focus_todo_item todo.id ;
               true
-            )] [pcdata todo.description];
+            )] [txt todo.description];
           button ~a:[a_class ["destroy"]; a_onclick (fun evt ->
               Controller.update (Delete todo.id) (r, f) ;
               focus_task_input () ;
@@ -328,7 +329,7 @@ module View = struct
                   true
                 ) ;
             ]) () ;
-        label ~a:[a_label_for "toggle-all"] [pcdata "Mark all as complete"] ;
+        label ~a:[a_label_for "toggle-all"] [txt "Mark all as complete"] ;
         R.Html5.ul ~a:[a_class ["todo-list"]] rl
       ])
 
@@ -342,7 +343,7 @@ module View = struct
         focus_task_input () ;
         true)] [
         a ~a:[a_href uri; a_class css]
-          [pcdata (Model.string_of_visibility visibility)]
+          [txt (Model.string_of_visibility visibility)]
       ]) :: acc
 
   let controls ((r, f) : rp) =
@@ -380,14 +381,14 @@ module View = struct
       footer ~a:[a_class ["footer"];
                  (R.filter_attrib (a_hidden ()) (React.S.map footer_hidden react_tasks))] [
         span ~a:[a_class ["todo-count"]] [
-          strong ~a:[] [R.Html5.pcdata (React.S.map nb_left react_tasks)] ;
-          R.Html5.pcdata (React.S.map item_left react_tasks)
+          strong ~a:[] [R.Html5.txt (React.S.map nb_left react_tasks)] ;
+          R.Html5.txt (React.S.map item_left react_tasks)
         ];
         R.Html5.ul ~a:[a_class ["filters"]]
           (ReactiveData.RList.from_signal (React.S.map vswap r)) ;
         button
           ~a:((R.filter_attrib (a_hidden ()) (React.S.map button_hidden react_tasks)) :: a_button) [
-          pcdata "Clear completed"
+          txt "Clear completed"
         ];
       ]
     in
@@ -395,22 +396,22 @@ module View = struct
 
   let info_footer =
     Html5.(footer ~a:[a_class ["info"]] [
-        p [pcdata "Double-click to edit a todo"] ;
+        p [txt "Double-click to edit a todo"] ;
         p [
-          pcdata "Written by " ;
-          a ~a:[a_href "https://stephanelegrand.wordpress.com/"] [pcdata "Stéphane Legrand"]
+          txt "Written by " ;
+          a ~a:[a_href "https://stephanelegrand.wordpress.com/"] [txt "Stéphane Legrand"]
         ];
         p [
-          pcdata "Various code improvements from " ;
-          a ~a:[a_href "https://github.com/Drup"] [pcdata "Gabriel Radanne"]
+          txt "Various code improvements from " ;
+          a ~a:[a_href "https://github.com/Drup"] [txt "Gabriel Radanne"]
         ];
         p [
-          pcdata "Based on " ;
-          a ~a:[a_href "https://github.com/evancz"] [pcdata "Elm implementation by Evan Czaplicki"]
+          txt "Based on " ;
+          a ~a:[a_href "https://github.com/evancz"] [txt "Elm implementation by Evan Czaplicki"]
         ];
         p [
-          pcdata "Part of " ;
-          a ~a:[a_href "http://todomvc.com"] [pcdata "TodoMVC"]
+          txt "Part of " ;
+          a ~a:[a_href "http://todomvc.com"] [txt "TodoMVC"]
         ]
       ])
 
