@@ -37,7 +37,6 @@ If you want to build the application on your own:
 
     ```sh
     > opam switch
-#  switch          compiler                       description
    4.07.0          ocaml-base-compiler.4.07.0     4.07.0
 →  4.07.1+flambda  ocaml-variants.4.07.1+flambda  4.07.1+flambda
    default         ocaml-system.4.06.1            default
@@ -71,8 +70,8 @@ If you want to build the application on your own:
 
   ```sh
   > ocamlbuild -use-ocamlfind \
-	    -pkgs lwt_ppx,js_of_ocaml-lwt,js_of_ocaml.ppx,js_of_ocaml.tyxml,tyxml,ppx_deriving,js_of_ocaml-ppx.deriving,js_of_ocaml.deriving,react,reactiveData \
-      todomvc.byte ;
+	-pkgs lwt_ppx,js_of_ocaml-lwt,js_of_ocaml.ppx,js_of_ocaml.tyxml,tyxml,ppx_deriving,js_of_ocaml-ppx.deriving,js_of_ocaml.deriving,react,reactiveData \
+  todomvc.byte ;
   ```
 
   The command options are:
