@@ -33,43 +33,24 @@ If you want to build the application on your own:
 
     This will create a `.opam` directory in your home.
 
-  - You need a very recent version of OCaml compiler. First check the current version used by `opam`:
+  - You should use a recent version of OCaml compiler. To check the current version used by `opam`:
 
     ```sh
     > opam switch
-    --     -- 3.12.1  Official 3.12.1 release
-    --     -- 4.00.0  Official 4.00.0 release
-    --     -- 4.00.1  Official 4.00.1 release
-    --     -- 4.01.0  Official 4.01.0 release
-    --     -- 4.02.0  Official 4.02.0 release
-    --     -- 4.02.1  Official 4.02.1 release
-    --     -- 4.02.2  Official 4.02.2 release
-    --     -- 4.02.3  Official 4.02.3 release
-    system  C system  System compiler (4.02.1)
-
+#  switch          compiler                       description
+   4.07.0          ocaml-base-compiler.4.07.0     4.07.0
+→  4.07.1+flambda  ocaml-variants.4.07.1+flambda  4.07.1+flambda
+   default         ocaml-system.4.06.1            default
     ```
 
-    The `C` letter shows the current compiler. Here it's a 4.02.1 version installed at a system level (ie in `/usr/local/bin/` for instance). We can see that a more recent version is available (4.02.3). So we will install it with `opam switch 4.02.3`. This won't remove the system compiler as `opam` will install the files in your `.opam` directory.
+    The `default` one is the version installed at a system level (ie in /usr/local/bin/ for instance). The `→` symbol shows the current compiler used by `opam`. If you need to install it, use the command `opam switch 4.07.1+flambda` for instance. This won't remove the system compiler as `opam` will install the files in your `.opam` directory.
 
     ```sh
-    > opam switch 4.02.3
+    > opam switch 4.07.1+flambda
     > eval `opam config env`
     ```
 
-    You can use again `opam switch` to check that the current compiler is now OCaml 4.02.2:
-
-    ```sh
-    > opam switch
-    --     -- 3.12.1  Official 3.12.1 release
-    --     -- 4.00.0  Official 4.00.0 release
-    --     -- 4.00.1  Official 4.00.1 release
-    --     -- 4.01.0  Official 4.01.0 release
-    --     -- 4.02.0  Official 4.02.0 release
-    --     -- 4.02.1  Official 4.02.1 release
-    --     -- 4.02.2  Official 4.02.2 release
-    4.02.3  C 4.02.3  Official 4.02.3 release
-    system  I system  System compiler (4.02.1)
-    ```
+    You can use again `opam switch` to check that the current compiler is now OCaml 4.07.1+flambda.
 
   - Let's now install Js_of_ocaml and all the required dependencies. As Js_of_ocaml is a part of a larger project named Eliom, we will simply install this package:
 
@@ -82,7 +63,7 @@ If you want to build the application on your own:
     ```sh
     > opam update
     > opam upgrade
-    ````
+    ```
 
   Congratulations, you now have all the required packages! We can now build the application.
 
@@ -90,20 +71,20 @@ If you want to build the application on your own:
 
   ```sh
   > ocamlbuild -use-ocamlfind \
-	-pkgs lwt.ppx,js_of_ocaml,js_of_ocaml.ppx,js_of_ocaml.tyxml,tyxml,ppx_deriving,js_of_ocaml.deriving.ppx,js_of_ocaml.deriving,react,reactiveData \
-	todomvc.byte ;
+	    -pkgs lwt_ppx,js_of_ocaml-lwt,js_of_ocaml.ppx,js_of_ocaml.tyxml,tyxml,ppx_deriving,js_of_ocaml-ppx.deriving,js_of_ocaml.deriving,react,reactiveData \
+      todomvc.byte ;
   ```
 
   The command options are:
   - `-use-ocamlfind` and `-pkgs ...` to use the necessary `ocamlfind` packages.
+
 3. Build the Javascript file from the `todomvc.byte` file with the `js_of_ocaml` command:
 
   ```sh
-  > js_of_ocaml +weak.js --opt 3 -o js/todomvc.js todomvc.byte
+  > js_of_ocaml --opt 3 -o js/todomvc.js todomvc.byte
   ```
 
   The command options are:
-  - `+weak.js` to include the necessary `weak` package.
   - `--opt 3` to set optimization profile.
   - `-o js/todomvc.js` to set output file name.
 
