@@ -37,9 +37,9 @@ If you want to build the application on your own:
 
     ```sh
     > opam switch
-   4.07.0          ocaml-base-compiler.4.07.0     4.07.0
-→  4.07.1+flambda  ocaml-variants.4.07.1+flambda  4.07.1+flambda
-   default         ocaml-system.4.06.1            default
+       4.07.0          ocaml-base-compiler.4.07.0     4.07.0
+    →  4.07.1+flambda  ocaml-variants.4.07.1+flambda  4.07.1+flambda
+       default         ocaml-system.4.06.1            default
     ```
 
     The `default` one is the version installed at a system level (ie in /usr/local/bin/ for instance). The `→` symbol shows the current compiler used by `opam`. If you need to install it, use the command `opam switch 4.07.1+flambda` for instance. This won't remove the system compiler as `opam` will install the files in your `.opam` directory.
