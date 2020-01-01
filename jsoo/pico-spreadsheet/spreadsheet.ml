@@ -108,7 +108,7 @@ end
 module View = struct
 
   open Action
-  open Tyxml_js
+  open Js_of_ocaml_tyxml.Tyxml_js
 
   let width = 300.
   let height = 150.
@@ -145,7 +145,7 @@ module View = struct
     in
     let svg_circles (_, sums, _) =
       let circles acc (v, x, y, r) =
-        let c = Tyxml_js.Svg.(
+        let c = Js_of_ocaml_tyxml.Tyxml_js.Svg.(
             circle ~a:[a_cx (x, Some `Px); a_cy (y, Some `Px); a_r (r, Some `Px)] [
               title (txt (Printf.sprintf "%.02f" v))
             ]
@@ -163,7 +163,7 @@ module View = struct
       in
       let (s, _) = List.fold_left string_path ("", 0) (x_y_circles sums) in
       let s = Printf.sprintf "M%d,%f %s L%f,%f Z" 0 height s width height in
-      let path = Tyxml_js.Svg.(path ~a:[a_d s] []) in
+      let path = Js_of_ocaml_tyxml.Tyxml_js.Svg.(path ~a:[a_d s] []) in
       [path]
     in
     let rl_svg_circles = ReactiveData.RList.from_signal (React.S.map svg_circles rs) in
@@ -266,7 +266,7 @@ let main _ =
   in
   let m = Model.empty in
   let rp = React.S.create m in
-  Dom.appendChild parent (Tyxml_js.To_dom.of_div (View.view rp)) ;
+  Dom.appendChild parent (Js_of_ocaml_tyxml.Tyxml_js.To_dom.of_div (View.view rp)) ;
   Lwt.return ()
 
-let _ = Lwt_js_events.onload () >>= main
+let _ = Js_of_ocaml_lwt.Lwt_js_events.onload () >>= main

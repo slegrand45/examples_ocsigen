@@ -410,4 +410,4 @@ let main _ =
     (fun _ -> assert false)
     (fun e -> start e)
 
-let _ = Lwt_js_events.onload () >>= main
+let _ = Js_of_ocaml_lwt.Lwt_js_events.onload () >>= main

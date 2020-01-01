@@ -10,7 +10,7 @@ let main _ =
   in
   let m = Model.empty_game in
   let rp = React.S.create m in
-  Dom.appendChild parent (Tyxml_js.To_dom.of_div (View.view rp)) ;
+  Dom.appendChild parent (Js_of_ocaml_tyxml.Tyxml_js.To_dom.of_div (View.view rp)) ;
   Lwt.return ()
 
-let _ = Lwt_js_events.onload () >>= main
+let _ = Js_of_ocaml_lwt.Lwt_js_events.onload () >>= main

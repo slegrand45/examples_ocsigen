@@ -1,6 +1,6 @@
 open Action
 open Types
-open Tyxml_js
+open Js_of_ocaml_tyxml.Tyxml_js
 
 let cell_row (r, f) board row cells_won = 
   let cells = Model.get_cells_row board row in

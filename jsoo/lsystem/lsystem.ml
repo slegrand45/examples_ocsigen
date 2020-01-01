@@ -77,7 +77,7 @@ module View = struct
         let alpha' = pi *. (alpha /. 180.) in
         let x' = x +. (d *. (cos alpha')) in
         let y' = abs_float(((abs_float(y -. conf.height)) +. (d *. (sin alpha'))) -. conf.height) in
-        let line = Tyxml_js.Svg.(
+        let line = Js_of_ocaml_tyxml.Tyxml_js.Svg.(
             line ~a:[a_class [(depth_to_class depth)];
                      a_x1 (x, Some `Px); a_y1 (y, Some `Px); a_x2 (x', Some `Px); a_y2 (y', Some `Px)] []
           )
@@ -98,8 +98,8 @@ module View = struct
 
   let draw conf node l =
     let (_, _, _, lines) = tree conf l in
-    let svg = Tyxml_js.Html5.(svg lines) in
-    Dom.appendChild node (Tyxml_js.To_dom.of_node svg)
+    let svg = Js_of_ocaml_tyxml.Tyxml_js.Html5.(svg lines) in
+    Dom.appendChild node (Js_of_ocaml_tyxml.Tyxml_js.To_dom.of_node svg)
 
 end
 
@@ -123,4 +123,4 @@ let main _ =
        let conf = Config.init width height in
        start conf e)
 
-let _ = Lwt_js_events.onload () >>= main
+let _ = Js_of_ocaml_lwt.Lwt_js_events.onload () >>= main

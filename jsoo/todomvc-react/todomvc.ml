@@ -70,10 +70,10 @@ module Model = struct
     | All -> "All"
 
   let from_json s =
-    Deriving_Json.from_string [%derive.json: t] s
+    Deriving_Json.from_string [%json: t] s
 
   let to_json m =
-    Deriving_Json.to_string [%derive.json: t] m
+    Deriving_Json.to_string [%json: t] m
 
 end
 
@@ -168,9 +168,9 @@ module View = struct
 
   open Model
   open Action
-  open Tyxml_js
+  open Js_of_ocaml_tyxml.Tyxml_js
 
-  module Ev = Lwt_js_events
+  module Ev = Js_of_ocaml_lwt.Lwt_js_events
   let bind_event ev elem handler =
     let handler evt _ = handler evt in
     Ev.(async @@ (fun () -> ev elem handler))
@@ -455,9 +455,9 @@ let main _ =
       | _ -> m
   in
   let rp = React.S.create m in
-  Dom.appendChild parent (Tyxml_js.To_dom.of_div (View.view rp)) ;
+  Dom.appendChild parent (Js_of_ocaml_tyxml.Tyxml_js.To_dom.of_div (View.view rp)) ;
   View.set_task_input m.Model.field ;
   View.focus_task_input () ;
   Lwt.return ()
 
-let _ = Lwt_js_events.onload () >>= main
+let _ = Js_of_ocaml_lwt.Lwt_js_events.onload () >>= main
